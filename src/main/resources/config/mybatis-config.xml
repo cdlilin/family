@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+    PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<properties>
+		<property name="dialect" value="mysql"/>
+		<property name="pageSqlId" value=".*ForPage$"/> 
+	</properties>
+  <settings>
+    <setting name="cacheEnabled" value="true"/>
+    <setting name="lazyLoadingEnabled" value="false"/>
+    <setting name="aggressiveLazyLoading" value="true"/>
+    <setting name="logImpl" value="LOG4J"/>
+  </settings>
+   
+  <plugins>
+    <plugin interceptor="org.swz.com.family.repository.mybatis.plugs.PaginationInterceptor"/>
+  </plugins>  
+</configuration>

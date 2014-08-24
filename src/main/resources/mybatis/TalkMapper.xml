@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="org.swz.com.family.repository.mybatis.TalkDao">
+
+    <resultMap id="talk" type="org.swz.com.family.entity.Talk">
+        <id column="id" property="talkId"/>
+        <result column="talk_content" property="talkContent"/>  
+        <result column="user_id" property="userId"/> 
+        <result column="nick" property="nick"/> 
+        <result column="create_time" property="createTime"/> 
+        <result column="modified_time" property="modifiedTime"/> 
+        <result column="reply_count" property="replyCount"/> 
+        <result column="reply_talk_id" property="repliedTalkId"/> 
+        <result column="agree_count" property="agreeCount"/> 
+        <result column="talk_type" property="talkType"/> 
+    </resultMap> 
+
+	<select id="getTalksForPage" parameterType="map" resultMap="talk">
+       select a.id,
+			a.talk_content,
+			a.user_id,
+			c.nick,
+			a.create_time,
+			a.modified_time,
+			a.reply_count,
+			a.reply_talk_id,
+			a.agree_count,
+			a.talk_type from family_user_talk a, family_user b, family_person c where a.user_id=b.id  and b.person_id=c.person_id and a.talk_type=0 order by a.create_time desc
+	</select> 
+	
+	<insert id="save">
+		insert into family_user_talk(
+		    id,
+			talk_content,
+			user_id,
+			create_time,
+			modified_time,
+			reply_count,
+			reply_talk_id,
+			agree_count,
+			talk_type)values(
+				#{talkId},
+				#{talkContent},
+				#{userId},
+				#{createTime},
+				#{modifiedTime},
+				#{replyCount},
+				#{repliedTalkId},
+				0, 
+				#{talkType}
+			) 
+	</insert>
+	
+	<update id="updateReplyCount">
+		update family_user_talk set reply_count=reply_count+1 where id=#{repliedTalkId}
+	</update>
+	
+	 
+	
+</mapper> 

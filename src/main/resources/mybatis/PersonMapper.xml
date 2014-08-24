@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="org.swz.com.family.repository.mybatis.PersonDao">
+
+    <resultMap id="person" type="org.swz.com.family.entity.Person">
+        <id column="person_id" property="personId"/>
+        <result column="first_name" property="firstName"/> 
+        <result column="last_name" property="lastName"/> 
+        <result column="full_name" property="fullName"/> 
+        <result column="nick" property="nick"/> 
+        <result column="nationality" property="nationality"/> 
+        <result column="profession" property="profession"/> 
+        <result column="address_id" property="addressId"/> 
+        <result column="birthDay" property="birthDay"/> 
+        <result column="constellation" property="constellation"/> 
+        <result column="status" property="status"/> 
+        <result column="cid" property="cid"/> 
+        <result column="modify_user_id" property="modifyUserId"/> 
+        <result column="parent_id" property="parentId"/>
+        <result column="create_user_id" property="createUserId"/> 
+        <result column="create_time" property="createTime"/> 
+        <result column="head_url" property="headUrl"/>  
+        <result column="family_id" property="familyId" />  
+        <result column="relationShip_type" property="relationShipType" />  
+        <collection property="children" column="{parentId=person_id, familyId=family_id}" select="org.swz.com.family.repository.mybatis.PersonDao.searchChildrenPerson"></collection>
+        <collection property="spouses" column="{parentId=person_id, familyId=family_id}" select="org.swz.com.family.repository.mybatis.PersonDao.searchSpousesPerson"/>
+    </resultMap>
+    
+    <resultMap id="personInfo" type="org.swz.com.family.entity.Person">
+        <id column="person_id" property="personId"/>
+        <result column="first_name" property="firstName"/> 
+        <result column="last_name" property="lastName"/> 
+        <result column="full_name" property="fullName"/> 
+        <result column="nick" property="nick"/> 
+        <result column="nationality" property="nationality"/> 
+        <result column="profession" property="profession"/> 
+        <result column="address_id" property="addressId"/> 
+        <result column="birthDay" property="birthDay"/> 
+        <result column="constellation" property="constellation"/> 
+        <result column="status" property="status"/> 
+        <result column="cid" property="cid"/> 
+        <result column="sex" property="sex"/>
+        <result column="modify_user_id" property="modifyUserId"/> 
+        <result column="create_user_id" property="createUserId"/> 
+        <result column="create_time" property="createTime"/> 
+        <result column="head_url" property="headUrl"/>   
+    </resultMap>
+
+	<select id="searchForTree" parameterType="map" resultMap="person">
+         select a.person_id,
+                a.first_name,
+				a.last_name,
+				a.full_name,
+				a.nick,
+				a.nationality,
+				a.profession,
+				a.address_id,
+				a.birthDay,
+				a.constellation,
+				a.status,
+				a.cid,
+				a.modify_user_id,
+				a.create_user_id,
+				a.create_time,
+				a.modify_time,
+				b.family_id,
+				b.relationShip_type,
+				a.email,
+				a.phone, 
+				b.parent_id,
+				a.head_url from family_person a, family_relationship b where a.person_id=b.person_id
+            and b.family_id=#{familyId} and b.parent_id='0' and b.relationShip_type=2 order by a.person_id
+        
+	</select> 
+	
+	<select id="searchSpousesPerson" parameterType="java.util.HashMap" resultMap="person">
+         select a.person_id,
+                a.first_name,
+				a.last_name,
+				a.full_name,
+				a.nick,
+				a.nationality,
+				a.profession,
+				a.address_id,
+				a.birthDay,
+				a.constellation,
+				a.status,
+				a.cid,
+				a.modify_user_id,
+				a.create_user_id,
+				a.create_time,
+				a.modify_time,
+				a.email,
+				a.phone, 
+				b.relationShip_type,
+				b.parent_id,
+				b.family_id,
+				a.head_url from family_person a, family_relationship b where a.person_id=b.person_id
+           		and b.parent_id=#{parentId} and b.family_id=#{familyId} and b.relationShip_type=3
+	</select>
+	
+	<select id="searchChildrenPerson" parameterType="java.util.HashMap" resultMap="person">
+         select a.person_id,
+                a.first_name,
+				a.last_name,
+				a.full_name,
+				a.nick,
+				a.nationality,
+				a.profession,
+				a.address_id,
+				a.birthDay,
+				a.constellation,
+				a.status,
+				a.cid,
+				a.modify_user_id,
+				a.create_user_id,
+				a.create_time,
+				a.modify_time,
+				a.email,
+				a.phone, 
+				b.relationShip_type,
+				b.parent_id,
+				b.family_id,
+				a.head_url from family_person a, family_relationship b where a.person_id=b.person_id
+           		and b.parent_id=#{parentId} and b.family_id=#{familyId} and b.relationShip_type=2
+	</select>
+	
+	
+	
+	<select id="getUserPersonInfoByUserId" parameterType="string" resultMap="personInfo">
+         select a.person_id,
+                a.first_name,
+				a.last_name,
+				a.full_name,
+				a.nick,
+				a.nationality,
+				a.profession,
+				a.address_id,
+				a.birthDay,
+				a.constellation,
+				a.status,
+				a.cid,
+				a.modify_user_id,
+				a.create_user_id,
+				a.create_time,
+				a.modify_time,
+				a.email,
+				a.sex,
+				a.phone,  
+				a.head_url from family_person a where
+               exists(select 1 from family_user b where b.person_id=a.person_id and b.id=#{userId})  
+	</select> 
+	
+	<select id="seachPersonInfoByPersonId" parameterType="string" resultMap="personInfo">
+         select a.person_id,
+                a.first_name,
+				a.last_name,
+				a.full_name,
+				a.nick,
+				a.nationality,
+				a.profession,
+				a.address_id,
+				a.birthDay,
+				a.constellation,
+				a.status,
+				a.cid,
+				a.modify_user_id,
+				a.create_user_id,
+				a.create_time,
+				a.modify_time,
+				a.email,
+				a.sex,
+				a.phone,  
+				a.head_url from family_person a where a.person_id=#{personId} 
+	</select> 
+	<insert id="save" > 
+        insert into family_person
+        ( 
+        	person_id,
+			first_name,
+			last_name,
+			full_name,
+			nick,
+			nationality,
+			profession,
+			address_id,
+			birthDay,
+			constellation,
+			status,
+			cid, 
+			create_user_id,
+			create_time, 
+			head_url,
+			email,
+			phone
+        )values
+        ( 
+           #{personId,jdbcType=VARCHAR},
+	       #{firstName,jdbcType=VARCHAR},
+	       #{lastName,jdbcType=VARCHAR},
+	       #{fullName,jdbcType=VARCHAR},
+	       #{nick,jdbcType=VARCHAR},
+	       #{nationality,jdbcType=NUMERIC},
+	       #{profession,jdbcType=NUMERIC},
+	       #{addressId,jdbcType=NUMERIC},
+	       #{birthDay,jdbcType=DATE},
+	       #{constellation,jdbcType=DATE},
+	       #{status,jdbcType=NUMERIC},
+	       #{cid,jdbcType=VARCHAR}, 
+	       #{createUserId,jdbcType=NUMERIC},
+	       now(), 
+	       #{headUrl,jdbcType=VARCHAR},   
+	       #{email,jdbcType=VARCHAR} ,
+	       #{phone,jdbcType=VARCHAR}
+        ) 
+    </insert> 
+</mapper> 

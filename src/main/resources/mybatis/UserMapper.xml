@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="org.swz.com.family.repository.mybatis.UserDao">
+
+    <resultMap id="user" type="org.swz.com.family.entity.User">
+        <id column="id" property="id"/>
+        <result column="user_name" property="userName"/> 
+        <result column="nickname" property="nickName"/> 
+        <result column="password" property="password"/> 
+        <result column="person_id" property="personId"/>
+    </resultMap>
+
+	<select id="getUserByUsernameAndAccId" parameterType="map" resultMap="user">
+        SELECT  id , user_name ,nickname, password,person_id from family_user
+        WHERE user_name = '${username}'
+	</select>
+	<insert id="save">
+		insert into family_user(id, user_name, password, create_time) values(#{id}, #{userName}, #{password}, now())
+	</insert> 
+	
+	<select id="getAccountForPage" parameterType="map" resultMap="user">
+		select * from family_user where user_name = #{user_name}
+	</select>
+
+    <select id="getAccountbyUsername" parameterType="string" resultType="map">
+        SELECT ACC.ACC_ID AS ACC_ID, ACC.ACC_NAME AS ACC_NAME
+        FROM TDS1ADM.PERSON PER
+        INNER JOIN TDS1ADM.PER_ACC_RELA PAR ON PER.PER_ID = PAR.PER_ID
+        INNER JOIN TDS1ADM.ACCOUNT ACC ON ACC.ACC_ID = PAR.ACC_ID
+        WHERE PER.USERNAME = #{username}
+    </select>
+    <update id="setPersonIdForUser">
+    	update family_user set person_id = #{personId} where id=#{userId}
+    </update>
+</mapper> 

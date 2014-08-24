@@ -1,0 +1,58 @@
+@charset "utf-8";
+/*reset*/
+html { color: #000; background: #FFF; }
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, textarea, blockquote, th, td { margin: 0; padding: 0; }
+table { border-collapse: collapse; border: 0; font-size:100%; }
+fieldset, img { border: 0; }
+img { vertical-align: middle; }
+address, caption, cite, code, dfn, em, th, var { font-style: normal; font-weight: normal; }
+ol, ul { list-style: none; text-transform: capitalize; }
+caption, th { text-align: left; }
+div, dl, dt, dd, ul, ol, li { zoom: 1; }
+abbr, acronym { border: 0; }
+/**/
+*:link, *:visited, *:hover, *:active, *:focus { -webkit-transition: all 0.3s ease-out; -moz-transition: all 0.3s ease-out; transition: all 0.3s ease-out; -o-transition: all 0.3s ease-out; -ms-transtion: all 0.3s ease-out; }
+/**/
+.clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
+.clearfix { zoom: 1; }
+.clear{ clear:both;}
+p{ margin:0 0 10px 0;}
+/*common*/
+.center-block { display: block; margin-left: auto; margin-right: auto; }
+.f-left { float: left; }
+.f-right { float: right; }
+.text-right { text-align: right; }
+.text-left { text-align: left !important; }
+.text-center { text-align: center; }
+.img-responsive { max-width: 100%; height: auto; }
+.container{position: relative;}
+.content{ width:960px;}
+/*margin*/
+.mt20{margin-top:20px; }
+.mt30{margin-top:30px;}
+.mt40{margin-top:40px;}
+.mt10{margin-top:10px;}
+.mb30{margin-bottom: 20px; }
+.mb20{margin-bottom:20px;}
+.mr35{margin-right:35px;}
+.pd20{padding:20px;}
+.pd35{padding:35px;}
+.pt30{ padding-top:30px;}
+.pt50{ padding-top:50px;}
+.pl110{ padding-left:110px;}
+.mr10{margin-right:10px;}
+.mb10{margin-bottom:10px;}
+.ml20{ margin-left:20px;}
+/*width*/
+.w200{ width:198px; border-right:1px solid #f0e8e4;}
+.w800{ width:798px;}
+.w290 { width: 290px; }
+.w680 { width: 690px; }
+.w690{ width:690px;}
+.w205{ width:205px;}
+.w230{ width:230px;}
+.w260{ width:260px;}
+.w755{ width:755px;}
+.w720{ width:720px;}
+.bgcw{ background-color:#FFF;}
+.border{ border:1px solid #f0e8e4;}

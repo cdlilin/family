@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="org.swz.com.family.repository.mybatis.FamilyDao">
+
+    <resultMap id="family" type="org.swz.com.family.entity.Family">
+        <id column="family_id" property="familyId"/>
+        <result column="family_name" property="familyName"/> 
+        <result column="area_id" property="areaId"/> 
+        <result column="create_user" property="createUser"/> 
+        <result column="user_type" property="userType"/> 
+        <result column="create_time" property="createTime"/> 
+        <result column="include_flag" property="includeFlag"/>  
+        <result column="isFamilyAdmin" property="isFamilyAdmin"/>
+    </resultMap>
+    
+    <resultMap id="familyForHit" type="org.swz.com.family.entity.Family">
+        <id column="family_id" property="familyId"/>
+        <result column="family_name" property="familyName"/> 
+        <result column="area_id" property="areaId"/> 
+        <result column="create_user" property="createUser"/> 
+        <result column="user_type" property="userType"/> 
+        <result column="create_time" property="createTime"/> 
+        <result column="include_flag" property="includeFlag"/>  
+        <result column="isFamilyAdmin" property="isFamilyAdmin"/>  
+        <association property="person" column="person_id" select="org.swz.com.family.repository.mybatis.PersonDao.seachPersonInfoByPersonId"/>
+    </resultMap>
+
+	<select id="searchFamily" parameterType="map" resultMap="family">
+         select a.family_id,
+                a.family_name,
+				a.area_id,
+				a.create_user_id,
+				a.user_type,
+				a.create_time,
+				a.include_flag
+				from family a where 1=1 
+		<if test="areaId != null">
+            and a.areaId like CONCAT(#{areaId} , '%')  
+        </if> 
+        <if test="createUserId != null">
+            and a.create_user_id =#{createUserId}  
+        </if>   
+        <if test="personId != null">
+            exists(select 1 from family_relationship b where b.person_id=#{personId} and a.family_id=b.family_id)  
+        </if>   
+         <if test="includeFlag != null">
+            and a.include_flag =#{includeFlag}  
+        </if>  
+	</select>
+	
+	<select id="searchFamilyForPerson" parameterType="string" resultMap="family">
+         select a.family_id,
+                b.family_name,
+				b.area_id,
+				b.create_user_id,
+				b.user_type,
+				b.create_time,
+				b.include_flag,
+				a.isFamilyAdmin
+				from family_relationship a , family b where a.family_id=b.family_id 
+             and a.person_id=#{personId}  
+	</select> 
+	
+	<select id="searchFamilyCountForPerson" parameterType="string" resultType="int">
+         select count(1) from family_relationship a , family b where a.family_id=b.family_id 
+             and a.person_id=#{personId}  
+	</select> 
+	<select id="searchFamilyForRegUser" parameterType="map" resultMap="familyForHit">
+         select a.family_id,
+                a.family_name,
+				a.area_id,
+				a.create_user_id,
+				a.user_type,
+				a.create_time,
+				a.include_flag,
+				c.person_id
+				from family a ,family_relationship b, family_person c where a.family_id=b.family_id and b.person_id=c.person_id
+		<if test="areaId != null">
+             and (#{areaId} like CONCAT(a.area_id  , '%') or a.area_id like CONCAT(#{areaId} , '%'))
+        </if>   
+        <if test="fullName != null">
+             and c.full_name=#{fullName}
+        </if> 
+	</select> 
+	<insert id="saveRelationShip" > 
+        insert into family_relationship
+        (  
+			person_id,
+			family_id,
+			parent_id,
+			relationship_type,
+			generation,
+			isFamilyAdmin
+        )values
+        ( 
+           #{personId,jdbcType=VARCHAR},
+	       #{familyId,jdbcType=VARCHAR},
+	       #{parentId,jdbcType=VARCHAR},
+	       #{relationShipType,jdbcType=NUMERIC},
+	       #{generation,jdbcType=NUMERIC},
+	       #{isFamilyAdmin,jdbcType=NUMERIC}
+        ) 
+	</insert>
+	<update id="updateRelationShip">
+		update family_relationship set relationship_type=2, parent_id=#{parentId} where family_id=#{familyId} and person_id=#{personId}
+	</update> 
+	<insert id="save" > 
+        insert into family
+        ( 
+        	family_id,
+			family_name,
+			area_id,
+			create_user_id,
+			user_type,
+			create_time,
+			include_flag 
+        )values
+        ( 
+           #{familyId,jdbcType=VARCHAR},
+	       #{familyName,jdbcType=VARCHAR},
+	       #{areaId,jdbcType=VARCHAR},
+	       #{createUserId,jdbcType=VARCHAR},
+	       #{userType,jdbcType=VARCHAR},
+	       now(),
+	       #{includeFlag,jdbcType=NUMERIC} 
+        ) 
+    </insert> 
+    
+    <delete id="delSpouseRelation">
+       delete from family_relationship where family_id=#{familyId} and person_id=#{personId}
+    </delete>
+</mapper> 
