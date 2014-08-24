@@ -53,6 +53,7 @@ public class ShiroRealm extends AuthorizingRealm {
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+    	logger.info("doGetAuthorizationInfo::::");
         ShiroUser shiroUser = (ShiroUser) principals.getPrimaryPrincipal();
         logger.info("Authorization::::" + shiroUser.getUsername());
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
@@ -78,6 +79,7 @@ public class ShiroRealm extends AuthorizingRealm {
                 }
             }
         } catch (Exception e) {
+        	e.printStackTrace();
             logger.error("查询角色出错::::::");
             logger.error(e);
         }
@@ -88,7 +90,7 @@ public class ShiroRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         UsernamePasswordToken usernamePasswordToken = (UsernamePasswordToken) token;
         String username = usernamePasswordToken.getUsername(); 
-        logger.info("Authentication:::::" + username);
+        logger.info("Authentication:::::" + username + "---" + new String(usernamePasswordToken.getPassword()));
        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("username", username);
@@ -103,6 +105,7 @@ public class ShiroRealm extends AuthorizingRealm {
                 
                 shiroUser.setUserId(user.getId());
                 shiroUser.setPersonId(user.getPersonId());
+                System.out.println("返回 SimpleAuthenticationInfo" + getName());
                 return new SimpleAuthenticationInfo(shiroUser, user.getPassword(), getName());
             }
         }catch(Exception e) {

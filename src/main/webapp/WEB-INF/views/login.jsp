@@ -172,30 +172,32 @@
           <div class="row">
             <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 login-signup-page">
                 <form >           
-                    
-                    <h2>登录你的账号</h2>
-
-                    <div class="input-group margin-bottom-20">
-                        <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
-                        <input type="text" class="form-control" placeholder="账号/注册邮箱">
+                    <h2>登录你的账号</h2> 
+                      <div class="input-group margin-bottom-20"><span class="has-error" data-bind="html: loginErrorMessage"></span></div>
+                      <div class="input-group margin-bottom-20">
+                        <span class="input-group-addon"><i class="fa fa-envelope"></i></span> 
+                         <div class="input-icon right">
+                             <i id="user_validate_ico" class="fa fa-warning tooltips" data-original-title="请输入你的账号或邮箱" data-container="body"></i>
+                             <input type="text" data-bind="value: userName"  name="userName" class="form-control" placeholder="账号/注册邮箱"> 
+                         </div>
                     </div>                    
                     <div class="input-group margin-bottom-20">
                         <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                        <input type="password" class="form-control" placeholder="密码">
-
-                        <a href="#" class="login-signup-forgot-link">忘记密码?</a>
+                         <div class="input-icon right">
+                            <i id="password_validate_ico" class="fa fa-warning tooltips" data-original-title="请输入你的登陆密码" data-container="body"></i>
+	                        <input name="password"  data-bind="value: password" type="password" class="form-control" placeholder="密码">  
+	                      </div>
                     </div>                    
+  
 
                     <div class="row">
                         <div class="col-md-6 col-sm-6">
-                            <div class="checkbox-list"><label class="checkbox"><input type="checkbox"> 记住账号</label></div>                        
-                        </div>
+                            <div class="checkbox-list"><label class="checkbox"><input type="checkbox"> 记住账号</label></div>   
+                        </div> 
                         <div class="col-md-6 col-sm-6">
-                            <button type="submit" class="btn theme-btn pull-right">登录</button>                        
+                            <button data-bind="click: loginSubmit"  class="btn theme-btn pull-right">登录</button>                        
                         </div>
-                    </div>
-
-                   
+                    </div>  
 
                    <!--   <hr><div class="login-socio">
                         <p class="text-muted">or login using:</p>
@@ -216,11 +218,104 @@
     <!-- END PAGE CONTAINER -->  
 
     <!-- BEGIN FOOTER -->
-    
+    <div class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 col-sm-4 space-mobile">
+                    <!-- BEGIN ABOUT -->                    
+                    <h2>关于我们</h2>
+                    <p class="margin-bottom-30">我们致力于创建全球值得信奈的完整家谱，希望可以通过我们的努力，您可以轻松的找到自己的家谱</p>
+                    <div class="clearfix"></div>                    
+                    <!-- END ABOUT -->          
+
+                    <h2>家谱展示</h2>
+                    <!-- BEGIN BLOG PHOTOS STREAM -->
+                    <div class="blog-photo-stream margin-bottom-30">
+                        <ul class="list-unstyled">
+                            <li><a href="#"><img src="assets/img/people/img5-small.jpg" alt=""></a></li>
+                            <li><a href="#"><img src="assets/img/works/img1.jpg" alt=""></a></li>
+                            <li><a href="#"><img src="assets/img/people/img4-large.jpg" alt=""></a></li>
+                            <li><a href="#"><img src="assets/img/works/img6.jpg" alt=""></a></li>
+                            <li><a href="#"><img src="assets/img/pics/img1-large.jpg" alt=""></a></li>
+                            <li><a href="#"><img src="assets/img/pics/img2-large.jpg" alt=""></a></li>
+                            <li><a href="#"><img src="assets/img/works/img3.jpg" alt=""></a></li>
+                            <li><a href="#"><img src="assets/img/people/img2-large.jpg" alt=""></a></li>
+                            <li><a href="#"><img src="assets/img/works/img2.jpg" alt=""></a></li>
+                            <li><a href="#"><img src="assets/img/works/img5.jpg" alt=""></a></li>
+                        </ul>                    
+                    </div>
+                    <!-- END BLOG PHOTOS STREAM -->                              
+                </div>
+                <div class="col-md-4 col-sm-4 space-mobile">
+                    <!-- BEGIN CONTACTS -->                                    
+                    <h2>我们的联系地址</h2>
+                    <address class="margin-bottom-40">
+                                                                                      中国 <br />
+                                                                                      成都市<br />
+                                                                                     荆翠中路88号 <br />
+                                                                                    电话: (028) 110 <br />
+                                                                                    邮箱: <a href="mailto:llaysz@163.com">llaysz@163.com</a>                        
+                    </address>
+                    <!-- END CONTACTS -->                                    
+
+                    <!-- BEGIN SUBSCRIBE -->                                    
+                    <h2>Monthly Newsletter</h2>  
+                    <p>Subscribe to our newsletter and stay up to date with the latest news and deals!</p>
+                    <form action="#" class="form-subscribe">
+                        <div class="input-group input-large">
+                            <input class="form-control" type="text">
+                            <span class="input-group-btn">
+                                <button class="btn theme-btn" type="button">SUBSCRIBE</button>
+                            </span>
+                        </div>
+                    </form>
+
+                    <!-- END SUBSCRIBE -->                                    
+                </div>
+                <div class="col-md-4 col-sm-4">
+                    <!-- BEGIN TWITTER BLOCK -->                                                    
+                    <h2>最新动态</h2>
+                    <dl class="dl-horizontal f-twitter">
+                        <dt><i class="fa fa-twitter"></i></dt>
+                        <dd>
+                            <a href="#">@keenthemes</a>
+                            2015年X家谱网正式上线了，期待您的加入
+                            <span>未来120天</span>
+                        </dd>
+                    </dl>                    
+                    <dl class="dl-horizontal f-twitter">
+                        <dt><i class="fa fa-twitter"></i></dt>
+                        <dd>
+                            <a href="#">@keenthemes</a>
+                            Sequat ipsum dolor onec eget orci fermentum condimentum lorem sit consectetur adipiscing
+                            <span>8 min ago</span>
+                        </dd>
+                    </dl>                    
+                    <dl class="dl-horizontal f-twitter">
+                        <dt><i class="fa fa-twitter"></i></dt>
+                        <dd>
+                            <a href="#">@keenthemes</a>
+                            Remonde sequat ipsum dolor lorem sit consectetur adipiscing
+                            <span>12 min ago</span>
+                        </dd>
+                    </dl>                    
+                    <dl class="dl-horizontal f-twitter">
+                        <dt><i class="fa fa-twitter"></i></dt>
+                        <dd>
+                            <a href="#">@keenthemes</a>
+                            Pilsum dolor lorem sit consectetur adipiscing orem sequat
+                            <span>16 min ago</span>
+                        </dd>
+                    </dl>                    
+                    <!-- END TWITTER BLOCK -->                                                                        
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- END FOOTER -->
 
     <!-- BEGIN COPYRIGHT -->
-    <div class="copyright">
+    <div class="copyright"> 
         <div class="container">
             <div class="row">
                 <div class="col-md-8">
@@ -261,15 +356,12 @@
 
     <!-- BEGIN PAGE LEVEL JAVASCRIPTS(REQUIRED ONLY FOR CURRENT PAGE) -->
     <script type="text/javascript" src="${ctx}/assets/plugins/fancybox/source/jquery.fancybox.pack.js"></script>
+    <script src="${ctx}/assets/plugins/knockout.js"></script>  
+   
 
     <script src="${ctx}/assets/scripts/app.js"></script>  
-    <script type="text/javascript" src="${ctx}/custom/js/login/login.js"></script>
-    <script type="text/javascript">
-        jQuery(document).ready(function() {    
-           App.init();
-		   App.initUniform();  
-        });
-    </script>
+    <script src="${ctx}/custom/js/login/login.js"></script>  
+    
     <!-- END PAGE LEVEL JAVASCRIPTS -->
 </body>
 <!-- END BODY -->

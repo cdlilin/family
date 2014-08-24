@@ -174,23 +174,32 @@
 
                     <div class="input-group margin-bottom-20">
                         <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                        <input type="text" class="form-control" placeholder="用户名">
+                         <div class="input-icon right">
+                        	<input data-bind="value: regModel().userName" type="text" class="form-control" placeholder="用户名">
+                         </div>
                     </div>
                     <div class="input-group margin-bottom-20">
                         <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
-                        <input type="text" class="form-control" placeholder="邮箱">
+                        <div class="input-icon right">
+                       		 <input data-bind="value: regModel().email" type="email" class="form-control" placeholder="邮箱">
+                       	</div>
                     </div>    
                     <div class="input-group margin-bottom-20">
                         <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                        <input type="password" class="form-control" placeholder="密码" >                   </div>
+                         <div class="input-icon right">
+                        	<input  data-bind="value: regModel().password1" type="password" class="form-control" placeholder="密码" > 
+                         </div>                 
+                    </div>
                     <div class="input-group margin-bottom-20">
                         <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                        <input type="password" class="form-control" placeholder="重复密码">
+                       	<div class="input-icon right">
+                        	<input data-bind="value: regModel().password2" type="password" class="form-control" placeholder="重复密码">
+                        </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-12">
-                            <button type="submit" class="btn theme-btn pull-right">注册</button>                        
+                            <button data-bind="click: regUser" class="btn theme-btn pull-right">注册</button>                        
                         </div>
                     </div>
 
@@ -256,14 +265,11 @@
 
     <!-- BEGIN PAGE LEVEL JAVASCRIPTS(REQUIRED ONLY FOR CURRENT PAGE) -->
     <script type="text/javascript" src="${ctx}/assets/plugins/fancybox/source/jquery.fancybox.pack.js"></script>
+    <script src="${ctx}/assets/plugins/knockout.js"></script>  
+    <script src="${ctx}/assets/plugins/knockout.validation.min.js"></script>  
 
     <script src="${ctx}/assets/scripts/app.js"></script>  
-    <script type="text/javascript">
-        jQuery(document).ready(function() {    
-           App.init();
-		   App.initUniform();  
-        });
-    </script>
+    <script src="${ctx}/custom/js/login/signup.js"></script>  
     <!-- END PAGE LEVEL JAVASCRIPTS -->
 </body>
 <!-- END BODY -->

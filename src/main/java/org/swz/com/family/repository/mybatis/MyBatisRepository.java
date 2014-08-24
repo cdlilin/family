@@ -16,4 +16,4 @@ package org.swz.com.family.repository.mybatis;
 //@Target(ElementType.TYPE)
 //@Documented
 //@Component
-public @interface MyBatisRepository {}
+public @interface MyBatisRepository { }
