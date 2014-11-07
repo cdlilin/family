@@ -16,10 +16,11 @@
     <link  type="text/css" rel="stylesheet" href="${ctx}/assets/css/font-awesome.min.css"/>
     <link type="text/css" rel="stylesheet" href="${ctx}/custom/css/common.css">
 	<link type="text/css" rel="stylesheet" href="${ctx}/custom/css/main.css">
-     <link type="text/css" rel="stylesheet" href="${ctx}/custom/css/familytree.css">
+    <link type="text/css" rel="stylesheet" href="${ctx}/custom/css/familytree.css">
+    
      
      
-     <link  type="text/css" rel="stylesheet" href="${ctx}/assets/jquery.imgareaselect-0.9.10/css/imgareaselect-animated.css"/>
+    <link  type="text/css" rel="stylesheet" href="${ctx}/assets/jquery.imgareaselect-0.9.10/css/imgareaselect-animated.css"/>
     <link type="text/css" rel="stylesheet" href="${ctx}/assets/jquery.imgareaselect-0.9.10/css/imgareaselect-default.css">
 	<link type="text/css" rel="stylesheet" href="${ctx}/assets/jquery.imgareaselect-0.9.10/css/imgareaselect-deprecated.css">
     <!-- Custom styles for this template -->
@@ -237,12 +238,12 @@
 										<tr>
 												<td width="180"><span class="dt">户口所在地</span></td> 
 												<td colspan="2">
-												<div class="row">
-													<select style="width:100px;margin-left:5px" class="form-control pull-left"   data-bind="options: areaSheng, value: personInfo().areaSheng, optionsText: 'name',  optionsCaption: '' ,event:{change: areaShengChange}"></select>
-													<select style="width:100px;margin-left:5px" class="form-control pull-left" data-bind="options: areaShi, value: personInfo().areaShi, optionsText: 'name',  optionsCaption: '' ,event:{change: areaShiChange}"></select>
-													<select style="width:100px;margin-left:5px" class="form-control pull-left" data-bind="options: areaXian, value: personInfo().areaXian, optionsText: 'name',  optionsCaption: '' ,event:{change: areaXianChange}"></select>
-													<select style="width:100px;margin-left:5px" class="form-control pull-left" data-bind="options: areaXiang, value: personInfo().areaXiang, optionsText: 'name',  optionsCaption: '' "></select>
-												</div>
+													<div class="row">
+														<select style="width:100px;margin-left:5px" class="form-control pull-left"   data-bind="options: areaSheng, value: personInfo().areaSheng, optionsText: 'name',  optionsCaption: '' ,event:{change: areaShengChange}"></select>
+														<select style="width:100px;margin-left:5px" class="form-control pull-left" data-bind="options: areaShi, value: personInfo().areaShi, optionsText: 'name',  optionsCaption: '' ,event:{change: areaShiChange}"></select>
+														<select style="width:100px;margin-left:5px" class="form-control pull-left" data-bind="options: areaXian, value: personInfo().areaXian, optionsText: 'name',  optionsCaption: '' ,event:{change: areaXianChange}"></select>
+														<select style="width:100px;margin-left:5px" class="form-control pull-left" data-bind="options: areaXiang, value: personInfo().areaXiang, optionsText: 'name',  optionsCaption: '' "></select>
+													</div>
 												</td>
 										</tr> 
 										<tr>
@@ -284,7 +285,7 @@
      </div>
 
  
-<div id="hitPerson_dlg" class="easyui-dialog" title="命中的人物信息"
+     <div id="hitPerson_dlg" class="easyui-dialog" title="命中的人物信息"
 		data-options="iconCls:'icon-save'"
 		style="width: 500px; height: 280px; padding: 10px">
 		<div class="form-group"
@@ -292,8 +293,7 @@
 			<a type="button" class="btn btn-success" data-bind="click: bindHitPerson"  data-toggle="modal"
 				data-target="#" id="btn_cross_sure">申请绑定</a>  
 		</div> 
-	<table class="table table-bordered table-striped table-hover" style="margin-left:5px; margin-right:5px; width:98%"
-						id="cross_table_crossInfo">
+	   <table class="table table-bordered table-striped table-hover" style="margin-left:5px; margin-right:5px; width:98%" id="cross_table_crossInfo">
 		<thead>
 			<tr>   
 			    <th align="center"></th>

@@ -5,6 +5,9 @@
  *******************************************************************************/
 package org.swz.com.family.entity;
 
+import java.util.Date;
+import java.util.List;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
@@ -18,13 +21,127 @@ public class User {
 	private String password2; 
 	private String password1;
 	private String password;
-	private String nickName;
 	private String email;
-	private String status;
-	private String personId; 
-    
+	private String confirmCode;
+	private Date createTime;
+	private Date lastLoadTime; 
+	private String familyId;
+	private int status;
+	private int addressId;
+	private String firstName;
+	private String lastName;
+	
+	private String familyName;
+	
+	private Date modifyTime;
 
+	private String personId;  
+	
+	private String headUrl;
+	
+	private String nick;
+	
+	private int isFamilyAdmin;
+	
+	private List<String> areaIds;
 	 
+
+ 
+	public String getFamilyName() {
+		return familyName;
+	}
+
+	public void setFamilyName(String familyName) {
+		this.familyName = familyName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public int getAddressId() {
+		return addressId;
+	}
+
+	public void setAddressId(int addressId) {
+		this.addressId = addressId;
+	}
+
+	public List<String> getAreaIds() {
+		return areaIds;
+	}
+
+	public void setAreaIds(List<String> areaIds) {
+		this.areaIds = areaIds;
+	}
+
+	public int getIsFamilyAdmin() {
+		return isFamilyAdmin;
+	}
+
+	public void setIsFamilyAdmin(int isFamilyAdmin) {
+		this.isFamilyAdmin = isFamilyAdmin;
+	}
+
+	public String getFamilyId() {
+		return familyId;
+	}
+
+	public void setFamilyId(String familyId) {
+		this.familyId = familyId;
+	}
+
+	public Date getLastLoadTime() {
+		return lastLoadTime;
+	}
+
+	public void setLastLoadTime(Date lastLoadTime) {
+		this.lastLoadTime = lastLoadTime;
+	}
+
+	public Date getModifyTime() {
+		return modifyTime;
+	}
+
+	public void setModifyTime(Date modifyTime) {
+		this.modifyTime = modifyTime;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+	
+	public String getHeadUrl() {
+		return headUrl;
+	}
+
+	public void setHeadUrl(String headUrl) {
+		this.headUrl = headUrl;
+	}
+
+	public String getNick() {
+		return nick;
+	}
+
+	public void setNick(String nick) {
+		this.nick = nick;
+	}
 
 	public String getId() {
 		return id;
@@ -60,6 +177,14 @@ public class User {
  
     
 
+	public String getConfirmCode() {
+		return confirmCode;
+	}
+
+	public void setConfirmCode(String confirmCode) {
+		this.confirmCode = confirmCode;
+	}
+
 	public String getUserName() {
 		return userName;
 	}
@@ -74,15 +199,7 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public String getNickName() {
-		return nickName;
-	}
-
-	public void setNickName(String nickName) {
-		this.nickName = nickName;
-	}
+	} 
 
 	public String getEmail() {
 		return email;
@@ -92,11 +209,13 @@ public class User {
 		this.email = email;
 	}
 
-	public String getStatus() {
+	 
+
+	public int getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(int status) {
 		this.status = status;
 	}
 

@@ -17,7 +17,7 @@
         <result column="apply_result" property="applyResult"/> 
     </resultMap>
 
-	<select id="getApplyByUserId" parameterType="string" resultMap="apply">
+	<select id="getApplyByParams" parameterType="map" resultMap="apply">
        select a.apply_id, 
 		      a.apply_time,
 		      a.apply_family,
@@ -25,8 +25,25 @@
 		      a.apply_validate,
 		      a.apply_person_id,
 		      a.isDone,
-		      a.apply_result from family_apply a, family b where a.apply_family=b.family_id and a.apply_user_id=#{userId} order by a.apply_time desc
+		      a.apply_result from family_apply a, family b where a.apply_family=b.family_id
+		      <if test="userId != null">
+		       and a.apply_user_id=#{userId}
+		      </if>
+		       <if test="applyType != null">
+		       and a.apply_type=#{applyType}
+		      </if>
+		       order by a.apply_time desc
 	</select> 
+	
+	<select id="getApplyCountByParams" parameterType="map" resultType="int">
+       select  count(1) from family_apply a, family b where a.apply_family=b.family_id
+	      <if test="userId != null">
+	       and a.apply_user_id=#{userId}
+	      </if>
+	       <if test="applyType != null">
+	       and a.apply_type=#{applyType}
+	      </if> 
+	</select>  
 	
 	<select id="getApplyForFamilyAdmin" parameterType="string" resultMap="apply">
       select a.apply_id, 
@@ -40,7 +57,7 @@
 		     a.isDone,        
 		     a.apply_result from family_apply a, family_user b,family c  
 		    where a.apply_user_id=b.id and a.apply_family=c.family_id and exists(select 1 from family_relationShip c 
-		                       where c.family_id=a.apply_family and c.person_id=#{personId} and c.isFamilyAdmin=1) order by a.isDone, a.apply_family, a.apply_time desc
+		                       where c.family_id=a.apply_family and c.person_id=#{personId} and c.isFamilyAdmin=1) and a.apply_result &lt;&gt; 3 order by a.isDone, a.apply_family, a.apply_time desc
 	</select> 
 	
 	<insert id="save">
@@ -50,7 +67,10 @@
 	
 	<update id="updateApplyStatus">
 		update family_apply set isDone = #{isDone}, apply_result=#{applyResult} where apply_id=#{applyId}
-	</update>
-	 
+	</update> 
+	
+	<delete id="deleteApples">
+		delete from family_apply where apply_id in(#{ids})
+	</delete> 
 	
 </mapper> 

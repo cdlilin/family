@@ -4,9 +4,18 @@ public class Area {
 	
 	private int id;
 	private String name;
+	private String fullName;
 	private int parentId;
 	private String status;
 	
+	
+	
+	public String getFullName() {
+		return fullName;
+	}
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
 	public int getId() {
 		return id;
 	}

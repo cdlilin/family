@@ -57,6 +57,13 @@
     <script src="${ctx}/custom/js/family/familytree.js"></script>
    
     <script type="text/javascript" src="${ctx}/assets/js/common.js"></script> 
+    <script src="assets/scripts/app.js"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function() {
+            App.init();    
+            App.initBxSlider();
+        });
+    </script>
 </head>
 <body>
 <div style="position: fixed;width:100%;z-index:500">
@@ -152,8 +159,7 @@
 	        <li id="save"><i class="fa fa-refresh"></i> 保存</li>
 	      </ul>
 	    </div>   
-	    <div id="dlg" class="easyui-dialog" title="导入对数表文件"
-			data-options="iconCls:'icon-save'" >
+	    <div id="dlg" class="easyui-dialog" title="导入对数表文件" data-options="iconCls:'icon-save'" >
 			<form id="file_upload_id" name="file_upload_name" action="cross/fileUpload" method="post" enctype="multipart/form-data"> 
 				<div  class="row" style="width: 100%; margin-top: 10px;">
 				       <label for="exampleInputEmail3" class="control-label pull-left">

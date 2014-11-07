@@ -44,5 +44,10 @@ public class CommonService {
 	}
 	
 	
+	public List<Area> searchAreaByName(String areaName) { 
+		List<Area> areas = areaDao.searchAreaByName(areaName);
+		return areas;  
+	}
+	
 	
 }

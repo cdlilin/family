@@ -11,7 +11,7 @@ import org.swz.com.family.repository.mybatis.plugs.Page;
  */
 @MyBatisRepository
 public interface UserDao {
-    User getUserByUsernameAndAccId(Map<String, Object> params);
+    User getUserByParam(Map<String, Object> params);
 
     List<Map<String, Object>> getAccountbyUsername(String username);
 
@@ -26,4 +26,12 @@ public interface UserDao {
 	void delete(Long id);
 	
 	void setPersonIdForUser(Map<String, Object> parameters);
+
+	void updateUserStatus(User user);
+
+	void updateUserConfirmCode(User confirmUser);
+
+	void setPassword(User user);
+	
+	void updateNick(Map<String, Object> parameters);
 }

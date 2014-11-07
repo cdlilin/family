@@ -18,77 +18,35 @@ function AppModel(){
 	self.areaXian = ko.observableArray(); 
 	self.areaXiang = ko.observableArray(); 
 	
-	self.init = function(){
-		$("#hitPerson_dlg").dialog("close");
-		self.loadAreaSheng(0); 
-		$("#personInfo_birthDay").datepicker();   
-		 
-		$('#user_apply_grid').datagrid({
-			url: '../apply/getApplayForUser',
-			method: 'get',
-			title: '待审核',
-			iconCls: 'icon-save',
-			width: "100%",
-			height: 450,
-			checkbox:true,
-			columns:[[
-			    {field:'ck', checkbox:true},
-				{field:'familyName',title:'申请家族',width:80},
-				{field:'applyValidate',title:'验证信息',width:80,align:'right'},
-				{field:'isDone',title:'是否处理',width:80,align:'right'},
-				{field:'applyResult',title:'处理结果',width:250}
-			]], 
-			toolbar:[{
-				text: '删除',
-				iconCls : 'icon-remove',
-				handler:function(){
-					var applies = $('#person_tree_table').treegrid('getSelected');
-					console.log(applies);
-				}
-			}]
+	self.init = function(){ 
+		$('#hitPerson_dlg').dialog({
+		    title: '这些可能是您的家族',
+		    width: 600,
+		    height: 500,
+		    closed: true,
+		    cache: false, 
+		    modal: true
 		});
+		self.loadAreaSheng(0);  
+		 
 		
-		$('#admin_apply_grid').datagrid({
-			url: '../apply/getApplayForFamilyAdmin',
-			method: 'get',
-			title: '个人申请',
-			iconCls: 'icon-save',
+		$('#hit_family_grid').datagrid({
+			url: '../getFamilyByPersonInfo',
+			method: 'POST',  
 			width: "100%",
-			height: 450,
+			height: "100%",
 			checkbox:true,
-			singleSelect:false,
+			singleSelect:true, 
 			columns:[[
 			    {field:'ck', checkbox:true},
-				{field:'familyName',title:'申请家族',width:80},
-				{field:'applyValidate',title:'验证信息',width:80,align:'right'},
-				{field:'isDone',title:'是否处理',width:80,align:'right'},
-				{field:'applyResult',title:'处理结果',width:250},
-				{field:'applyUserName',title:'申请用户',width:250}
+				{field:'familyName',title:'申请家族',width:80}
 			]], 
 			toolbar:[{
-				text: '同意',
+				text: '申请绑定',
 				iconCls : 'icon-add',
 				handler:function(){
-					var applies = $('#admin_apply_grid').treegrid('getSelections');
-					$.ajax({
-						url : "../apply/checkApples",
-						cache : false,
-						type : "POST",
-						dataType : "json",
-						contentType : "application/json", 
-						data: JSON.stringify(applies),
-						success : function(result) {  
-							$('#admin_apply_grid').treegrid("reload");
-						},
-						error : function() {
-							 
-						},
-						complete : function(){ 
-
-						}
-					}); 
-					
-//					console.log(JSON.stringify(applies))
+					var row = $('#hit_family_grid').datagrid('getSelected');
+					self.bindHitPerson(row);
 				}
 			},'-',{
 				text: '删除',
@@ -96,41 +54,73 @@ function AppModel(){
 				handler:function(){
 					
 				}
-			}]
+			}],
+			onLoadSuccess:function(data){  
+		        if(data.total > 0){  //如果能命中就弹出窗口哦提示用户
+		        	$('#hitPerson_dlg').dialog("open");
+		        } 
+		    },
+		    onSelect: function(i, d){
+		    	self.loadFamilyPerson(d);
+		    }
 		});
+		
+		$('#person_tree_table').treegrid({ 
+		    method:"GET",
+		    idField:'personId',
+		    treeField:'fullName',
+		    width: "100%",
+			height: "100%",
+		    collapsible: true, 
+		    columns:[[
+		        {title:'姓名 ',field:'fullName',width:180, editor:'text' }, 
+		        {title:'配偶',field:'spouses',width:180, formatter: function(value){
+		        	var str = "";
+		        	$.each(value, function(i, n){
+		        		str +=  n.fullName + "<a class='btn' onclick='javascript:delSpouse(\"" + n.personId + "\", \"" + n.parentId + "\")'><i class='icon-add'/></a>";
+		        	});
+		        	return str;
+		        }},
+		        {title:'昵称',field:'nick',width:180, editor:'text'},
+		        {title:'关系',field:'relationShipType',width:180, editor:'text'}, 
+		        {title:'生日',field:'birthDayStr',width:180, editor:'datebox'} 
+		    ]]  
+		}); 
+		
+		
 	 
-//	var cmenu;
-//	function createColumnMenu(){
-//		cmenu = $('<div/>').appendTo('body');
-//		cmenu.menu({
-//			onClick: function(item){
-//				if (item.iconCls == 'icon-ok'){
-//					$('#dg').datagrid('hideColumn', item.name);
-//					cmenu.menu('setIcon', {
-//						target: item.target,
-//						iconCls: 'icon-empty'
-//					});
-//				} else {
-//					$('#dg').datagrid('showColumn', item.name);
-//					cmenu.menu('setIcon', {
-//						target: item.target,
-//						iconCls: 'icon-ok'
-//					});
-//				}
-//			}
-//		});
-//		var fields = $('#dg').datagrid('getColumnFields');
-//		for(var i=0; i<fields.length; i++){
-//			var field = fields[i];
-//			var col = $('#dg').datagrid('getColumnOption', field);
-//			cmenu.menu('appendItem', {
-//				text: col.title,
-//				name: field,
-//				iconCls: 'icon-ok'
-//			});
-//		}
-//	}
-//		
+		var cmenu;
+		function createColumnMenu(){
+			cmenu = $('<div/>').appendTo('body');
+			cmenu.menu({
+				onClick: function(item){
+					if (item.iconCls == 'icon-ok'){
+						$('#dg').datagrid('hideColumn', item.name);
+						cmenu.menu('setIcon', {
+							target: item.target,
+							iconCls: 'icon-empty'
+						});
+					} else {
+						$('#dg').datagrid('showColumn', item.name);
+						cmenu.menu('setIcon', {
+							target: item.target,
+							iconCls: 'icon-ok'
+						});
+					}
+				}
+			});
+			var fields = $('#dg').datagrid('getColumnFields');
+			for(var i=0; i<fields.length; i++){
+				var field = fields[i];
+				var col = $('#dg').datagrid('getColumnOption', field);
+				cmenu.menu('appendItem', {
+					text: col.title,
+					name: field,
+					iconCls: 'icon-ok'
+				});
+			}
+		}
+		
 	}; 
 	
 	self.loadPersonInfo = function(){
@@ -156,17 +146,16 @@ function AppModel(){
 		}); 
 	};
 	
-	self.hitFamilyForUser = function(){ 
-		self.hitPersonInfos.remove(function(){
-			return true;
+	self.loadFamilyPerson = function(row){ 
+		$('#person_tree_table').treegrid({
+			url: "../" + row.familyId + "/getFamilyTreeForGrid"
 		});
-		$.ajax({
-			url : "../getFamilyByPersonInfo",
-			cache : false,
-			type : "POST",
-			dataType : "json",
-			contentType : "application/json", 
-			data: JSON.stringify({
+	};
+	
+	self.hitFamilyForUser = function(){  
+		 console.log(self.personInfo());
+//		if(self.personInfo().pesonId() == null || self.personInfo().pesonId() == ""){
+			$('#hit_family_grid').datagrid("load", { 
 				areaId : self.personInfo().areaId(),
 				firstName: self.personInfo().firstName(),
 				lastName: self.personInfo().lastName(),
@@ -177,26 +166,11 @@ function AppModel(){
 				cid: self.personInfo().cid(),
 				sex: self.personInfo().sex(),
 				birthDay: $("#personInfo_birthDay").val()
-			}),
-			success : function(result) {  
-				if (result != null && result != "undefind" && result.code == "0") { 
-					if(result.data.length > 0){
-						$.each(result.data, function(i, n){
-							self.hitPersonInfos.push(self.initHitPersonInfo(n));
-						}); 
-						$("#hitPerson_dlg").dialog({autoOpen: true, modal: false, draggable: true, resizable:true});
-					}; 
-				}  
-			},
-			error : function() {
-				 
-			},
-			complete : function(){ 
-
-			}
-		}); 
+			}); 
+//		} 
 	}; 
-	self.bindHitPerson = function(){  
+	self.bindHitPerson = function(row){  
+		
 		$.ajax({
 			url : "../apply/sendApply",
 			cache : false,
@@ -204,14 +178,14 @@ function AppModel(){
 			dataType : "json",
 			contentType : "application/json", 
 			data: JSON.stringify({
-				familyId : self.hitPersonInfo().familyId(),
-				personId: self.hitPersonInfo().personId(), 
-				applyValidate: "我是" +  self.hitPersonInfo().fullName()
+				familyId : row.familyId,
+				personId: row.person.personId, 
+				applyValidate: row.person.fullName
 			}),
 			success : function(result) {  
 				if (result != null && result != "undefind" && result.code == "0") { 
 					$("#hitPerson_dlg").dialog("close");
-					showSuccessDialog("申请已发送，静候佳音!");
+					$.messager.alert('提示','申请已发送，静候佳音!');
 				}  
 			},
 			error : function() {
@@ -222,6 +196,8 @@ function AppModel(){
 			}
 		});
 	};
+	
+	 
 	
 	self.initHitPersonInfo = function(family){ 
 		var hitPerson = new PersonInfo();
@@ -296,6 +272,11 @@ function AppModel(){
 		self.personInfo().phone(personInfo.phone);  
 		self.personInfo().sex(personInfo.sex);  
 		self.personInfo().headUrl(personInfo.headUrl);  
+		self.personInfo().personId(personInfo.personId);  
+		self.personInfo().userName(personInfo.userName);
+		self.personInfo().profile(personInfo.profile);
+		self.personInfo().personId(personInfo.personId);
+		
 	};
 	
 	self.initAreaForUpate = function(id, c, checkedId, targetObj){
@@ -416,12 +397,13 @@ function AppModel(){
 	
 	self.savePersonInfo = function(){  
 		$.ajax({
-			url : "../person/savePerson",
+			url : "../person/" + (self.personInfo().personId() == null ? "addPerson": "modifyPerson"),
 			cache : false,
 			type : "POST",
 			dataType : "json",
 			contentType : "application/json", 
 			data: JSON.stringify({
+				personId: self.personInfo().personId(),
 				areaId : self.personInfo().areaId(),
 				firstName: self.personInfo().firstName(),
 				lastName: self.personInfo().lastName(),
@@ -431,13 +413,14 @@ function AppModel(){
 				phone: self.personInfo().phone(),
 				cid: self.personInfo().cid(),
 				sex: self.personInfo().sex(),
+				profile: self.personInfo().profile(),
 				birthDay: $("#personInfo_birthDay").val(),
 				headUrl: $("#user_head_img").attr("src").substring(basePath.length + 1)
 			}),
 			success : function(result) {  
 				if (result != null && result != "undefind" && result.code == "0") { 
 					
-					showSuccessDialog("保存用户信息成功!");
+					$.messager.alert("提示", "保存用户信息成功!")
 				}  
 			},
 			error : function() {
@@ -471,7 +454,10 @@ var PersonInfo = function(data){
 	self.phone = ko.observable();  
 	self.sex = ko.observable(1);  
 	self.personId = ko.observable();  
-	self.headUrl = ko.observable();  
+	self.headUrl = ko.observable();   
+	self.userName = ko.observable();  
+	self.profile = ko.observable();  
+	self.personId = ko.observable();  
 	
 	
 	self.sexStr = ko.computed(function(){  

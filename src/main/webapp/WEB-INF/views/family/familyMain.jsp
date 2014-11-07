@@ -25,7 +25,7 @@ String basePath = request.getContextPath();
 <link type="text/css" rel="stylesheet" href="<%=basePath %>/custom/css/main.css">
 <link type="text/css" rel="stylesheet" href="<%=basePath %>/custom/css/familytree.css"> 
 <link href="<%=basePath %>/assets/easyui/themes/default/easyui.css" rel="stylesheet">
-<link href="<%=basePath %>/assets/easyui/themes/icon.css" rel="stylesheet">
+<%-- <link href="<%=basePath %>/assets/easyui/themes/icon.css" rel="stylesheet"> --%>
 <script type="text/javascript" src="<%=basePath %>/assets/easyui/jquery.min.js"></script>
 <script type="text/javascript" src="<%=basePath %>/assets/js/html5.js"></script>
 <script type="text/javascript" src="<%=basePath %>/assets/js/bootstrap.min.js"></script> 
@@ -151,8 +151,7 @@ var basePath = "<%=basePath %>";
 		<div data-bind="click: addParent" data-options="iconCls:'icon-add'">添加父节点</div>
 		<div data-bind="click: addChildren"  data-options="iconCls:'icon-add'">添加子节点</div>
 		<div data-bind="click: addPN"  data-options="iconCls:'icon-add'">添加兄弟节点</div>
-		<div data-bind="click: addSpouse"  data-options="iconCls:'icon-add'">添加妻子节点</div>
-		 
+		<div data-bind="click: addSpouse"  data-options="iconCls:'icon-add'">添加妻子节点</div> 
 	</div>
 	
 	<div id="person_info_dlg" class="easyui-dialog" title="用户基本信息"

@@ -19,7 +19,8 @@ function AppModel(){
 	self.areaXiang = ko.observableArray(); 
 	 
 	self.init = function(){ 
-		self.loadFamily(); 
+//		self.loadFamily(); 
+		self.loadFamilyPerson();
 		$('#family_create_dlg').dialog("close") ;
 		$("#person_info_dlg").dialog("close");
 //		var str = '<ul id="org" style="display:none">'
@@ -49,14 +50,17 @@ function AppModel(){
 		console.log(row);
 	};
 	self.addParent = function(row){ 
+		console.log(self.personInfo())
 		if(self.personInfo().parentId() == 0){
 			self.showPersonInfoDlg ();
-			self.newPersonInfo(new PersonInfo({familyId: self.currentFamily().familyId(),parentId: 0, relationShipType: 1}));
+			self.newPersonInfo(new PersonInfo({sex: "1",familyId: self.personInfo().familyId(),parentId: 0, relationShipType: 1}));
+		}else{
+			$.messager.alert("提示", "当前人物已有父节点无法添加");
 		} 
 	};
 	self.addChildren = function(){ 
 		self.showPersonInfoDlg();
-		self.newPersonInfo(new PersonInfo({familyId: self.currentFamily().familyId(),parentId: self.personInfo().personId(), relationShipType: 2}));
+		self.newPersonInfo(new PersonInfo({sex: "1", familyId: self.personInfo().familyId(),parentId: self.personInfo().personId(), relationShipType: 2}));
 	};
 	
 	self.showPersonInfoDlg = function(parentId,relationShipType){
@@ -64,10 +68,10 @@ function AppModel(){
 	};
 	self.addSpouse = function(row){ 
 		self.showPersonInfoDlg();
-		self.newPersonInfo(new PersonInfo({familyId: self.currentFamily().familyId(),parentId: self.personInfo().personId(), relationShipType: 3}));
+		self.newPersonInfo(new PersonInfo({sex: "1", familyId: self.personInfo().familyId(),parentId: self.personInfo().personId(), relationShipType: 3}));
 	};
 	
-	self.delSpouse = function(personId, parentId){
+	self.delSpouse = function(familyId, personId, parentId){
 		$.ajax({
 			url : "person/delSpouse",
 			cache : false,
@@ -75,7 +79,7 @@ function AppModel(){
 			dataType : "json",
 			contentType : "application/json", 
 			data: JSON.stringify({  
-				familyId: self.currentFamily().familyId(),
+				familyId: familyId,
 				personId: personId 
 			}),
 			success : function(result) {  
@@ -109,13 +113,11 @@ function AppModel(){
 		});
 	};
 	
-	self.loadFamilyPerson = function(row){
-		self.currentFamily(row);  
-		console.log(row.familyId());
+	self.loadFamilyPerson = function(){ 
 		
 		$('#person_tree_table').treegrid({
-		    url: row.familyId() + "/getFamilyTreeForGrid",
-		    title: row.familyName() + "-家族成员列表",
+		    url: "getFamilyTreeForCurrentUser",
+		    title: "家族成员列表",
 		    method:"GET",
 		    idField:'personId',
 		    treeField:'fullName',
@@ -129,17 +131,27 @@ function AppModel(){
 		        {title:'配偶',field:'spouses',width:180, formatter: function(value){
 		        	var str = "";
 		        	$.each(value, function(i, n){
-		        		str +=  n.fullName + "<a class='btn' onclick='javascript:delSpouse(\"" + n.personId + "\", \"" + n.parentId + "\")'><i class='icon-add'/></a>";
+		        		str +=  n.fullName + "<a onclick='javascript:delSpouse(\"" + n.familyId + "\",\"" + n.personId + "\", \"" + n.parentId + "\")'><i class='icon-bolt'/></a>";
 		        	});
 		        	return str;
 		        }},
 		        {title:'昵称',field:'nick',width:180, editor:'text'},
-		        {title:'关系',field:'relationShipType',width:180, editor:'text'}, 
+		        {title:'关系',field:'relationShipType',formatter:function(value){
+		        	switch(value){
+		        	    case 1 :
+		        	    	return "父子";
+		        	    	break;
+		        	    case 2 :
+		        	    	return "子女";
+		        	    	break;
+		        	    case 3 :
+		        	    	return "配偶";
+		        	    	break;
+		        	}
+		        }, width:180, editor:'text'}, 
 		        {title:'生日',field:'birthDayStr',width:180, editor:'datebox'} 
 		    ]]  
-		}); 
-		
-		$('#person_tree_table').treegrid("load", row.familyId() + "/getFamilyTreeForGrid");
+		});  
 	};
 	self.loadFamily = function(){
 		self.families.remove(function(item){
@@ -183,13 +195,17 @@ function AppModel(){
 				fullName: self.newPersonInfo().fullName(),   
 				familyId: self.newPersonInfo().familyId(),
 				parentId: self.newPersonInfo().parentId(),
+				sex: self.newPersonInfo().sex(),
+				headUrl: $("#user_head_img").attr("src").substring(basePath.length + 1),
 				personId: self.personInfo().personId(),
+				profile: self.newPersonInfo().profile(),
 				relationShipType: self.newPersonInfo().relationShipType() 
+				
 			}),
 			success : function(result) {  
 				if (result != null && result != "undefind" && result.code == "0") { 
 					$('#person_tree_table').treegrid("reload");
-					showSuccessDialog("添加成员成功");
+					$.messager.alert("成功提示", "添加成员成功");
 					$("#person_info_dlg").dialog("close");
 					//不刷新树的添加方式
 //					 switch(self.newPersonInfo().relationShipType() + ''){
@@ -315,6 +331,9 @@ var PersonInfo = function(data){
 	self.relationShipType = ko.observable(data == null ? "" : data.relationShipType); 
 	self.parentId = ko.observable(data == null ? "" : data.parentId); 
 	self.familyId =  ko.observable(data == null ? "" : data.familyId); 
+	self.headUrl = ko.observable(data == null ? "" : data.headUrl);
+	self.profile = ko.observable(data == null ? "" : data.profile);
+	
 	
 	self.fullName = ko.computed(function(){  
 		return self.firstName() + self.lastName();
@@ -355,7 +374,7 @@ var familyInfo = function(data){
 
 var getElementStr = function(person){  
 	var familyStr = "<li id='person_" + person.personId + "'>" + person.fullName;
-	if(person.children.length > 0){
+	if(person.children && person.children.length > 0){
 		familyStr += "<ul id='children_" + person.personId + "'>";
 		$.each(person.children, function(i, n){
 			familyStr +=  getElementStr(n);

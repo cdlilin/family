@@ -18,7 +18,8 @@ function AppModel(){
 	self.areaXiang = ko.observableArray(); 
 	 
 	self.init = function(){ 
-		self.loadFamily(); 
+//		self.loadFamily(); 
+		self.loadFamilyTree();
 		$('#dlg').dialog("close") 
 //		var str = '<ul id="org" style="display:none">'
 //	              + '<li>CEO: Jack Paul<img alt="" style="width:180px;height:100px" src="">'
@@ -36,26 +37,25 @@ function AppModel(){
 //	         
 	}; 
 	
-	self.refashFamilyTree = function(){
+	self.refashFamilyTree = function(chartStr){
 		$("#chart").html("");
-		$(self.currentFamily().familyTree()).jOrgChart({
+		$(chartStr).jOrgChart({
             chartElement : '#chart',
             dragAndDrop  : true
         });
 	};
 	
 	self.loadFamilyTree = function(row){
-		self.currentFamily(row);
+//		self.currentFamily(row);
 		$.ajax({
-			url : row.familyId() + "/getFamilyTree",
+			url : "getFamilyRealtionShipForCurrentUser",
 			cache : false,
 			type : "GET",
 			dataType : "json",
 			contentType : "application/json", 
 			success : function(result) {  
 				if (result != null && result != "undefind" && result.code == "0") {  
-					self.currentFamily().familyTree(getElementStr(result.data));
-					self.refashFamilyTree();
+					self.refashFamilyTree(getElementStr(result.data));
 				};  
 			},
 			error : function() {
@@ -134,7 +134,7 @@ function AppModel(){
 				if (result != null && result != "undefind" && result.code == "0") { 
 					$("<div id='test_test_test' style='display:none'>").appendTo("body");
 					$(self.currentFamily().familyTree()).appendTo("#test_test_test"); 
-					$("<li>" + self.personInfo().fullName() + "<img id='" + result.data.personId + "' style='width:180px; height:100px'></li>").appendTo($("#test_test_test").find("#children_" + self.personInfo().parentId()));
+					$("<li>" + self.personInfo().fullName() + "<img src='/" + "/family/" +  result.data.headUrl + "'" + " id='" + result.data.personId + "' style='width:180px; height:100px'></li>").appendTo($("#test_test_test").find("#children_" + self.personInfo().parentId()));
 					 
 					console.log($("#test_test_test").html()); 
 					self.currentFamily().familyTree($("#test_test_test").html());
@@ -210,7 +210,7 @@ var getElementStr = function(person){
 		}); 
 		familyStr += "</ul>" ;
 	} 
-	familyStr += "<img id='" + person.personId + "' style='width:180px;height:100px;'/></li>" ; 
+	familyStr += "<img src='" + (person.headUrl == null ? ('/family/' + 'custom/images/avatar1.png'): ("/family/" +  person.headUrl)) + "' id='" + person.personId + "' style='width:180px;height:100px;'/></li>" ; 
 	return familyStr;
 };   
  

@@ -6,6 +6,7 @@
 
     <resultMap id="area" type="org.swz.com.family.entity.Area">
         <id column="area_id" property="id"/>
+        <result column="full_name" property="fullName"/> 
         <result column="name" property="name"/> 
         <result column="pid" property="parentId"/> 
         <result column="status" property="status"/> 
@@ -19,4 +20,7 @@
         SELECT  area_id , name ,pid, status from area 
 	</select> 
 	
+	<select id="searchAreaByName" parameterType="string" resultMap="area">
+        SELECT  area_id , full_name ,pid ,status from area where full_name like concat('%', #{areaName}, '%') 
+	</select>  
 </mapper> 

@@ -222,7 +222,100 @@
 
   </div>
       <!-- END FOOTER -->
+     <div class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 col-sm-4 space-mobile">
+                    <!-- BEGIN ABOUT -->                    
+                    <h2>关于我们</h2>
+                    <p class="margin-bottom-30">我们致力于创建全球值得信奈的完整家谱，希望可以通过我们的努力，您可以轻松的找到自己的家谱</p>
+                    <div class="clearfix"></div>                    
+                    <!-- END ABOUT -->          
 
+                    <h2>家谱展示</h2>
+                    <!-- BEGIN BLOG PHOTOS STREAM -->
+                    <div class="blog-photo-stream margin-bottom-30">
+                        <ul class="list-unstyled">
+                            <li><a href="#"><img src="assets/img/people/img5-small.jpg" alt=""></a></li>
+                            <li><a href="#"><img src="assets/img/works/img1.jpg" alt=""></a></li>
+                            <li><a href="#"><img src="assets/img/people/img4-large.jpg" alt=""></a></li>
+                            <li><a href="#"><img src="assets/img/works/img6.jpg" alt=""></a></li>
+                            <li><a href="#"><img src="assets/img/pics/img1-large.jpg" alt=""></a></li>
+                            <li><a href="#"><img src="assets/img/pics/img2-large.jpg" alt=""></a></li>
+                            <li><a href="#"><img src="assets/img/works/img3.jpg" alt=""></a></li>
+                            <li><a href="#"><img src="assets/img/people/img2-large.jpg" alt=""></a></li>
+                            <li><a href="#"><img src="assets/img/works/img2.jpg" alt=""></a></li>
+                            <li><a href="#"><img src="assets/img/works/img5.jpg" alt=""></a></li>
+                        </ul>                    
+                    </div>
+                    <!-- END BLOG PHOTOS STREAM -->                              
+                </div>
+                <div class="col-md-4 col-sm-4 space-mobile">
+                    <!-- BEGIN CONTACTS -->                                    
+                    <h2>我们的联系地址</h2>
+                    <address class="margin-bottom-40">
+                                                                                      中国 <br />
+                                                                                      成都市<br />
+                                                                                     荆翠中路88号 <br />
+                                                                                    电话: (028) 110 <br />
+                                                                                    邮箱: <a href="mailto:llaysz@163.com">llaysz@163.com</a>                        
+                    </address>
+                    <!-- END CONTACTS -->                                    
+
+                    <!-- BEGIN SUBSCRIBE -->                                    
+                    <h2>Monthly Newsletter</h2>  
+                    <p>Subscribe to our newsletter and stay up to date with the latest news and deals!</p>
+                    <form action="#" class="form-subscribe">
+                        <div class="input-group input-large">
+                            <input class="form-control" type="text">
+                            <span class="input-group-btn">
+                                <button class="btn theme-btn" type="button">SUBSCRIBE</button>
+                            </span>
+                        </div>
+                    </form>
+
+                    <!-- END SUBSCRIBE -->                                    
+                </div>
+                <div class="col-md-4 col-sm-4">
+                    <!-- BEGIN TWITTER BLOCK -->                                                    
+                    <h2>最新动态</h2>
+                    <dl class="dl-horizontal f-twitter">
+                        <dt><i class="fa fa-twitter"></i></dt>
+                        <dd>
+                            <a href="#">@keenthemes</a>
+                            2015年X家谱网正式上线了，期待您的加入
+                            <span>未来120天</span>
+                        </dd>
+                    </dl>                    
+                    <dl class="dl-horizontal f-twitter">
+                        <dt><i class="fa fa-twitter"></i></dt>
+                        <dd>
+                            <a href="#">@keenthemes</a>
+                            Sequat ipsum dolor onec eget orci fermentum condimentum lorem sit consectetur adipiscing
+                            <span>8 min ago</span>
+                        </dd>
+                    </dl>                    
+                    <dl class="dl-horizontal f-twitter">
+                        <dt><i class="fa fa-twitter"></i></dt>
+                        <dd>
+                            <a href="#">@keenthemes</a>
+                            Remonde sequat ipsum dolor lorem sit consectetur adipiscing
+                            <span>12 min ago</span>
+                        </dd>
+                    </dl>                    
+                    <dl class="dl-horizontal f-twitter">
+                        <dt><i class="fa fa-twitter"></i></dt>
+                        <dd>
+                            <a href="#">@keenthemes</a>
+                            Pilsum dolor lorem sit consectetur adipiscing orem sequat
+                            <span>16 min ago</span>
+                        </dd>
+                    </dl>                    
+                    <!-- END TWITTER BLOCK -->                                                                        
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- BEGIN COPYRIGHT -->
     <div class="copyright">
         <div class="container">

@@ -7,8 +7,15 @@ public class RelationShip {
 	private int generation;
 	private int isFamilyAdmin;
 	private String parentId;
+	private int familyType;
 	
 	
+	public int getFamilyType() {
+		return familyType;
+	}
+	public void setFamilyType(int familyType) {
+		this.familyType = familyType;
+	}
 	public String getParentId() {
 		return parentId;
 	}

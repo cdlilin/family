@@ -7,6 +7,9 @@ package org.swz.com.family.web;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.shiro.SecurityUtils;
@@ -16,12 +19,15 @@ import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.swz.com.family.common.util.StringUtil;
+import org.swz.com.family.entity.User;
+import org.swz.com.family.service.LoginService;
 import org.swz.com.family.service.ShiroRealm;
 import org.swz.com.family.web.dto.Result;
 
@@ -36,6 +42,9 @@ import org.swz.com.family.web.dto.Result;
 public class LoginController {
 
     private final static Log logger = LogFactory.getLog(LoginController.class);
+    
+    @Autowired
+    private LoginService loginService;
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login() {
@@ -51,8 +60,8 @@ public class LoginController {
     @RequestMapping(value = "/login", method=RequestMethod.POST)
     public Result isLogin(@RequestBody Map<String,Object> reqMap){
 		Result result = new Result("0", "");
-	    Subject user = SecurityUtils.getSubject();
-	    
+	    Subject user = SecurityUtils.getSubject(); 
+	    System.out.println(reqMap);
 	    UsernamePasswordToken token = new UsernamePasswordToken(StringUtil.objToStr(reqMap.get("userName")), StringUtil.objToStr(reqMap.get("password")));
 	    if(user.getSession().getAttribute("userName") != null && user.getSession().getAttribute("userName").equals(token.getUsername())){
 	    	return result;
@@ -84,7 +93,77 @@ public class LoginController {
 	    }
 	    
 	    return result;
-	  }
+	  }  
+	
+	@ResponseBody
+    @RequestMapping(value = "/loginForApp", method=RequestMethod.GET)
+    public Result loginForApp(HttpServletRequest request, HttpServletResponse response){
+		Result result = new Result("0", "");
+	    Subject subject = SecurityUtils.getSubject();
+	    String password = StringUtil.objToStr(request.getParameter("password"));
+	    String userName = StringUtil.objToStr(request.getParameter("userName"));
+	    User user = loginService.login(userName);  
+	    
+	    if(user != null){
+	    	if(user.getPassword().equals(password)){
+	    		UsernamePasswordToken token = new UsernamePasswordToken(StringUtil.objToStr(request.getParameter("userName")), StringUtil.objToStr(request.getParameter("password")));
+	    	    
+	    		if(subject.getSession().getAttribute("userName") != null && subject.getSession().getAttribute("userName").equals(token.getUsername())){
+	    	    	return result;
+	    	    }
+	    	    token.setRememberMe(true);
+	    	    try {
+	    	    	subject.login(token); 
+	    		      if(subject.isAuthenticated()){
+	    		    	  ShiroRealm.ShiroUser shiroUser = (ShiroRealm.ShiroUser)subject.getPrincipal();
+	    		    	  result.setData(shiroUser);
+	    		    	  subject.getSession().setAttribute("userName", token.getUsername());
+	    		    	  result.setMessage("index");
+	    		      }
+    		    } catch (UnknownAccountException uae) { 
+    		    	
+    		    } catch (IncorrectCredentialsException ice) { 
+    		    	result.setCode("-1");
+    		    	result.setMessage("密码错误，请重新输入");
+    		    	logger.info("password didn't match."); 
+
+    		    } catch (LockedAccountException lae) { 
+    		    	result.setCode("-1");
+    		    	result.setMessage("该用户被锁定了，无法登陆");
+
+    		    } catch (AuthenticationException ae) { 
+    		    	result.setCode("-1");
+    		    	result.setMessage("请核对用户名和密码以后重新登陆"); 
+    		    } 
+	    	}else{
+	    		result.setCode("-1");
+		    	result.setMessage("密码错误");
+		    	logger.info("username wasn't in the system.");  
+	    	}
+	    	
+	    }else{
+	    	result.setCode("-1");
+	    	result.setMessage("该用户名没有找到，请检查");
+	    	logger.info("username wasn't in the system."); 
+
+	    } 
+	    
+	    return result;
+	  } 
+	
+	@ResponseBody
+    @RequestMapping(value = "/loginOutForApp", method=RequestMethod.GET)
+    public Result loginOutForApp(HttpServletRequest request, HttpServletResponse response){
+		Result result = new Result("0", "");
+		try{
+			Subject currentUser = SecurityUtils.getSubject();
+			currentUser.logout();
+		}catch(Exception e){
+			result.setCode("-1");
+			result.setMessage("退出失败");
+		} 
+	    return result;
+	  } 
 
     @RequestMapping(value = "user/switch", method = RequestMethod.GET)
     public String logout() {

@@ -12,11 +12,65 @@ public class Family {
 	private int userType;
 	private int areaId;
 	private int isFamilyAdmin;
+	private String familyRules;
+	private String surname;
 	
 	//用于匹配家庭的时候使用
 	private Person person;
 	
 	
+	//查询同姓家谱
+	private int familyCount;
+	private String createUserName;
+	private String areaName;
+	private String createUserHeadUrl;
+	private int createUserSex;
+	
+	
+	
+	public String getCreateUserHeadUrl() {
+		return createUserHeadUrl;
+	}
+	public void setCreateUserHeadUrl(String createUserHeadUrl) {
+		this.createUserHeadUrl = createUserHeadUrl;
+	}
+	 
+	public int getCreateUserSex() {
+		return createUserSex;
+	}
+	public void setCreateUserSex(int createUserSex) {
+		this.createUserSex = createUserSex;
+	}
+	public String getAreaName() {
+		return areaName;
+	}
+	public void setAreaName(String areaName) {
+		this.areaName = areaName;
+	}
+	public int getFamilyCount() {
+		return familyCount;
+	}
+	public void setFamilyCount(int familyCount) {
+		this.familyCount = familyCount;
+	}
+	public String getCreateUserName() {
+		return createUserName;
+	}
+	public void setCreateUserName(String createUserName) {
+		this.createUserName = createUserName;
+	}
+	public String getSurname() {
+		return surname;
+	}
+	public void setSurname(String surname) {
+		this.surname = surname;
+	}
+	public String getFamilyRules() {
+		return familyRules;
+	}
+	public void setFamilyRules(String familyRules) {
+		this.familyRules = familyRules;
+	}
 	public Person getPerson() {
 		return person;
 	}

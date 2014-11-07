@@ -35,4 +35,15 @@ public class LoginService {
 		
 		return userDao.getAccountForPage(map);
 	}
+	
+	
+	public User login(String username) {
+		// TODO Auto-generated method stub
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("username", username);
+		
+		return userDao.getUserByParam(map);
+	}
+	
+	
 }

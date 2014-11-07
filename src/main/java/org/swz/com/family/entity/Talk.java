@@ -1,6 +1,7 @@
 package org.swz.com.family.entity;
 
 import java.util.Date;
+import java.util.List;
 
 import org.swz.com.family.common.util.CustomDateSerializer;
 
@@ -17,8 +18,52 @@ public class Talk {
 	private int replyCount ;  
 	private String repliedTalkId ;  
 	private int agreeCount;   
-	private int talkType; 
+	private int talkType;
+	private int talkFocus;
+	private int isAgree;
+	private int sex;
+	private String headUrl;
+	private List<Talk> replies; 
 	
+	private List<FamilyTalkAgree> agrees;
+	
+	
+	public int getTalkFocus() {
+		return talkFocus;
+	}
+	public void setTalkFocus(int talkFocus) {
+		this.talkFocus = talkFocus;
+	}
+	public int getSex() {
+		return sex;
+	}
+	public void setSex(int sex) {
+		this.sex = sex;
+	}
+	public List<FamilyTalkAgree> getAgrees() {
+		return agrees;
+	}
+	public void setAgrees(List<FamilyTalkAgree> agrees) {
+		this.agrees = agrees;
+	}
+	public int getIsAgree() {
+		return isAgree;
+	}
+	public void setIsAgree(int isAgree) {
+		this.isAgree = isAgree;
+	}
+	public String getHeadUrl() {
+		return headUrl;
+	}
+	public void setHeadUrl(String headUrl) {
+		this.headUrl = headUrl;
+	}
+	public List<Talk> getReplies() {
+		return replies;
+	}
+	public void setReplies(List<Talk> replies) {
+		this.replies = replies;
+	}
 	public String getTalkId() {
 		return talkId;
 	}

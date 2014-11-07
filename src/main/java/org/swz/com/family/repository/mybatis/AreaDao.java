@@ -8,4 +8,5 @@ import org.swz.com.family.entity.Area;
 public interface AreaDao {
 	List<Area> getAreaByParentId(int parentId);
 	List<Area> searchAll();
+	List<Area> searchAreaByName(String areaName);
 }

@@ -14,12 +14,13 @@ public class Person {
 	private int nationality;
 	private int profession;
 	private int addressId;
-	private Date birthDay;
+	private String addressName;
+	private String birthday;
 	private String birthDayStr; 
 	private int constellation;
 	private int status;
 	private String cid;
-	private String modifyId;
+	private String modifyUserId;
 	private String createUserId;
 	private Date createTime;
 	private Date modifyTime;
@@ -28,6 +29,11 @@ public class Person {
 	private String phone;
 	private int sex;
 	
+	private int isHFlag;
+	
+	private String profile;
+	
+	private String userName;
 	
 	private String familyId;
 	
@@ -38,9 +44,29 @@ public class Person {
 	private List<Person> children; 
 	
 	
-	private List<Person> spouses; 
+	private List<Person> spouses;  
+	
+	private List<FamilyPersonResume> resumes;
 	
 	
+	public String getAddressName() {
+		return addressName;
+	}
+	public void setAddressName(String addressName) {
+		this.addressName = addressName;
+	}
+	public int getIsHFlag() {
+		return isHFlag;
+	}
+	public void setIsHFlag(int isHFlag) {
+		this.isHFlag = isHFlag;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 	public List<Person> getSpouses() {
 		return spouses;
 	}
@@ -78,6 +104,12 @@ public class Person {
 		this.birthDayStr = birthDayStr;
 	}
 	
+	public String getProfile() {
+		return profile;
+	}
+	public void setProfile(String profile) {
+		this.profile = profile;
+	}
 	public String getPhone() {
 		return phone;
 	}
@@ -116,12 +148,12 @@ public class Person {
 	public void setSex(int sex) {
 		this.sex = sex;
 	}
-	public Date getBirthDay() {
-		return birthDay;
+	 
+	public String getBirthday() {
+		return birthday;
 	}
-	public void setBirthDay(Date birthDay) {
-		this.birthDay = birthDay;
-		this.setBirthDayStr(DateUtils.formatDate(birthDay, DateUtils.DATE_SMALL_STR));
+	public void setBirthday(String birthday) {
+		this.birthday = birthday;
 	}
 	public String getNick() {
 		return nick;
@@ -175,11 +207,12 @@ public class Person {
 		this.cid = cid;
 	}
 	 
-	public String getModifyId() {
-		return modifyId;
+	 
+	public String getModifyUserId() {
+		return modifyUserId;
 	}
-	public void setModifyId(String modifyId) {
-		this.modifyId = modifyId;
+	public void setModifyUserId(String modifyUserId) {
+		this.modifyUserId = modifyUserId;
 	}
 	public String getCreateUserId() {
 		return createUserId;
@@ -204,5 +237,12 @@ public class Person {
 	}
 	public void setHeadUrl(String headUrl) {
 		this.headUrl = headUrl;
+	}
+	public List<FamilyPersonResume> getResumes() {
+		return resumes;
+	}
+	public void setResumes(List<FamilyPersonResume> resumes) {
+		this.resumes = resumes;
 	} 
+	
 }

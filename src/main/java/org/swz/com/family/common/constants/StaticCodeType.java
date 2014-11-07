@@ -15,8 +15,14 @@ public enum StaticCodeType {
 	SYSTEM_DATA_FORMAT_ERROR	("M02","不是合法的JSON数据"),
 	SYSTEM_PARAM_LOST			("M03","缺少必要的请求参数"),
 	SYSTEM_PARAM_TYPE_ERROR		("M04","请求参数类型错误"),
-	SYSTEM_DATA_ISNULL  		("M05","获取数据为空");
+	SYSTEM_DATA_ISNULL  		("M05","获取数据为空"),
 	
+	
+	USER_CREATE_ISCREATED  		("U01","用户已创建"),
+	USER_CREATE_CONFIRMERROR  		("U02","验证码错误"),
+	USER_CREATE_CONFIRMOUTOFDATE    ("U03","验证码过期"),
+	USER_CREATE_CONFIRMCREATEDCODEINDATE    ("U04","用户已创建验证码没过期"), 
+	USER_CREATE_NOUSER    ("U05","用户不存在"); 
 	
 	private String code;
 	private String description;
@@ -29,8 +35,7 @@ public enum StaticCodeType {
 	static {
 		for (StaticCodeType item : values()) {
 			DICT.put(item.code, item);
-			DICT2.put(item.description, item);
-			
+			DICT2.put(item.description, item); 
 		}
 	}
 	

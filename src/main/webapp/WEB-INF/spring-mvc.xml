@@ -38,7 +38,6 @@
 
     <mvc:resources mapping="/assets/**" location="/assets/"/>
     <mvc:resources mapping="/custom/**" location="/custom/"/>
-     <mvc:resources mapping="/esayui/**" location="/esayui/"/>
 
 	<!-- 定义JSP文件的位置 -->  
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -53,20 +52,20 @@
 	<mvc:view-controller path="/" view-name="login"/>
 	<mvc:view-controller path="/index" view-name="index"/>
 	<mvc:view-controller path="/signup" view-name="signup"/>
+	
     <!--
 	<mvc:view-controller path="/web/mashup-client" view-name="/web/mashup-client"/>
 -->
-	<!-- 将Controller抛出的异常转到特定View, 保持SiteMesh的装饰效果 -->
-    <!--
-	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">  
-		<property name="exceptionMappings">  
-			<props>
-				<prop key="org.apache.shiro.authz.UnauthorizedException">error/403</prop>
-				<prop key="java.lang.Throwable">error/500</prop>
-            </props>  
-		</property>  
-    </bean> 
-    -->
+	<!-- 将Controller抛出的异常转到特定View, 保持SiteMesh的装饰效果 -->  
+    <bean id="exceptionResolver" class="org.swz.com.family.common.exception.CustomSimpleMappingExceptionResolver">  
+      <property name="exceptionMappings">   
+        <props>   
+          <prop key="com.jason.exception.SystemException">error/500</prop>   
+          <prop key="com.jason.exception.BusinessException">error/errorpage</prop>  
+          <prop key="java.lang.exception">error/500</prop>   
+       </props>   
+     </property>   
+    </bean>  
 
     <bean id="multipartResolver"  
 	    class="org.springframework.web.multipart.commons.CommonsMultipartResolver">  
