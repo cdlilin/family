@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="org.swz.com.family.repository.mybatis.UserDao">
+
+    <resultMap id="user" type="org.swz.com.family.entity.User">
+        <id column="id" property="id"/>
+        <result column="user_name" property="userName"/> 
+        <result column="nick" property="nick"/> 
+        <result column="password" property="password"/> 
+        <result column="person_id" property="personId"/>
+        <result column="head_url" property="headUrl"/>
+        <result column="address_id" property="addressId"/> 
+        <result column="create_time" property="createTime"/>
+        <result column="modify_time" property="modifyTime"/>
+        <result column="status" property="status"/>
+        <result column="confirm_code" property="confirmCode"/>
+        <result column="last_load_time" property="lastLoadTime"/>
+        <result column="family_id" property="familyId"/>
+        <result column="family_name" property="familyName"/>
+        <result column="first_name" property="firstName"/>
+        <result column="last_name" property="lastName"/>
+        <result column="isFamilyAdmin" property="isFamilyAdmin"/>
+        <collection property="areaIds" column="id" select="getAreaByUserId"></collection>
+    </resultMap>
+	<select id="getAreaByUserId" parameterType="string" resultType="string">
+	     select area_id from family_area_admin where user_id=#{userId}
+	</select>
+	<select id="getUserByParam" parameterType="map" resultMap="user">
+        SELECT  a.id , 
+                a.user_name,  
+                a.password, 
+                a.person_id, 
+                a.status, 
+                a.confirm_code, 
+                a.nick, 
+                b.head_url, 
+                a.create_time, 
+                b.address_id,
+                b.first_name,
+                b.last_name,
+                (select isFamilyAdmin from family_relationship c where b.person_id=c.person_id and c.familyType=1) isFamilyAdmin,
+                 (select family_id from family_relationship c where b.person_id=c.person_id and c.familyType=1) family_id,
+                (select d.family_name from family_relationship c, family d where b.person_id=c.person_id and c.family_id=d.family_id and c.familyType=1) family_name,
+                a.modify_time from family_user a left join family_person b on a.person_id=b.person_id
+         WHERE 1=1
+      	<if test="userId != null">
+            and a.id = #{userId}  
+        </if> 
+        <if test="username != null">
+            and a.user_name = #{username}  
+        </if> 
+         <if test="password != null">
+            and a.password = #{password}  
+        </if> 
+         <if test="status != null">
+            and a.status = #{status}  
+        </if>   
+	</select>
+	<insert id="save">
+		insert into family_user(id, user_name, password,create_time, status, confirm_code, modify_time) values(#{id}, #{userName}, #{password}, now(), #{status}, #{confirmCode}, now())
+	</insert> 
+	
+	<select id="getAccountForPage" parameterType="map" resultMap="user">
+		select * from family_user where user_name = #{user_name}
+	</select>
+
+    <select id="getAccountbyUsername" parameterType="string" resultType="map">
+        SELECT ACC.ACC_ID AS ACC_ID, ACC.ACC_NAME AS ACC_NAME
+        FROM TDS1ADM.PERSON PER
+        INNER JOIN TDS1ADM.PER_ACC_RELA PAR ON PER.PER_ID = PAR.PER_ID
+        INNER JOIN TDS1ADM.ACCOUNT ACC ON ACC.ACC_ID = PAR.ACC_ID
+        WHERE PER.USERNAME = #{username}
+    </select>
+    <update id="setPersonIdForUser">
+    	update family_user set person_id = #{personId}, modify_time=now() where id=#{userId}
+    </update> 
+    <update id="updateUserConfirmCode">
+    	update family_user set confirm_code = #{confirmCode}, modify_time=now() where user_name=#{userName}
+    </update>
+    
+     <update id="updateUserStatus">
+    	update family_user set status = #{status}, modify_time=now(), last_load_time=now() where id=#{id}
+    </update>
+    
+      <update id="setPassword">
+    	update family_user set password = #{password}, modify_time=now() where user_name=#{userName}
+    </update>
+    
+    <update id="updateNick">
+    	update family_user set nick = #{nick}, modify_time=now() where person_id=#{personId}
+    </update>
+    
+</mapper> 

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="org.swz.com.family.repository.mybatis.FamilyPersonResumeDao">
+
+    <resultMap id="familyPersonResume" type="org.swz.com.family.entity.FamilyPersonResume">
+        <id column="resume_id" property="resumeId"/>
+        <result column="resume_dynasty" property="resumeDynasty"/> 
+        <result column="resume_start_time" property="resumeStartTime"/> 
+        <result column="resume_end_time" property="resumeEndTime"/> 
+        <result column="resume_content" property="resumeContent"/> 
+        <result column="create_user_id" property="createUserId"/>  
+        <result column="person_id" property="personId"/>
+        <result column="full_name" property="fullName"/>
+        <result column="honorary_degree" property="honoraryDegree"/>
+        <result column="modify_user_id" property="modifyUserId"/>
+    </resultMap>  
+
+	<select id="getFamilyContributionForPage" parameterType="map" resultMap="familyPersonResume">
+         select b.resume_id,
+			b.resume_dynasty,
+			b.resume_start_time,
+			b.resume_end_time,
+			a.full_name,
+			b.resume_content,
+			b.create_user_id,
+			b.person_id,
+			b.honorary_degree from family_person a, family_person_resume b where a.person_id=b.person_id and a.first_name=(select first_name from family_person where person_id=#{personId}) order by a.birthDay  
+	</select>
+	
+	<select id="selectFamilyPersonResumeByPersonId" parameterType="string" resultMap="familyPersonResume">
+         select a.resume_id,
+			a.resume_dynasty,
+			a.resume_start_time,
+			a.resume_end_time,
+			a.resume_content,
+			a.create_user_id,
+			a.person_id,
+			b.full_name,
+			a.honorary_degree from family_person_resume a, family_person b where a.person_id=b.person_id and a.person_id=#{personId}  
+	</select> 
+	
+	<insert id="addFamilyPersonResume" > 
+        insert into family_person_resume
+        (  
+	        resume_id,
+			resume_dynasty,
+			resume_start_time,
+			resume_end_time,
+			resume_content,
+			create_user_id,
+			person_id,
+			honorary_degree 
+        )values
+        ( 
+           #{resumeId,jdbcType=VARCHAR},
+	       #{resumeDynasty,jdbcType=VARCHAR},
+	       #{resumeStartTime,jdbcType=VARCHAR},
+	       #{resumeEndTime,jdbcType=VARCHAR},
+	       #{resumeContent,jdbcType=VARCHAR},
+	       #{createUserId,jdbcType=VARCHAR},
+	       #{personId,jdbcType=VARCHAR},
+	       #{honoraryDegree,jdbcType=NUMERIC}
+        ) 
+	</insert>
+	<update id="updateRelationShip">
+		update family_person_resume set resume_dynasty=#{resumeDynasty},
+		 resume_start_time=#{resumeStartTime},
+		 resume_end_time=#{resumeEndTime},
+		 resume_content=#{resumeContent},
+		 honorary_degree=#{honoraryDegree},
+		 modify_user_id=#{modifyUserId} 
+		 where resume_id=#{resumeId}
+	</update> 
+	 
+    
+    <delete id="delSpouseRelation">
+       delete from family_person_resume where resume_id=#{resumeId}
+    </delete>
+</mapper> 

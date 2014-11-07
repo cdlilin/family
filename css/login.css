@@ -1,0 +1,70 @@
+﻿/* public */
+html { }
+body { color: #333; font-family:"宋体", Arial; font-size: 12px; background: #f2eee4; line-height:1.41;}
+p{ margin:0; padding:0;}
+a { color: #735b20; text-decoration: none; outline: none; }
+a:hover { color: #4391ea; }
+
+/*banner*/
+#banner{ position:relative;  height:480px; background:#6a8e4a url(../images/login-slide.jpg) no-repeat center top;}
+/*formbox*/
+.formbox{ width:220px; padding-top:95px; float:right;}
+.formbox .hd{ font-size:15px; margin-bottom:20px;}
+.formbox .hd .tit{ color:#000}
+.formbox .hd .tolink{ color:#000; float:right; overflow:hidden;}
+.formbox .hd .tolink span{ display:inline-block; float:left;}
+.formbox .hd .tolink .icon-circle-right{margin-left: 8px;float:left;}
+.formbox .form{ position:relative;}
+.formbox .form .form-row{ margin-bottom:20px;}
+.formbox .form .input{ width:100%; background-color:rgba(255,255,255,0.6); height:36px; line-height:36px; border-radius:5px; border:1px solid #67a93f; outline:none; color:#666; font-size:15px; padding:0 10px;*padding:0 0; box-sizing:border-box;}
+.formbox .form .button{ width:100%; background-color:#f8ed0d; box-shadow:2px 2px 4px rgba(0,0,0,0.07); height:36px; border-radius:5px; border:1px solid #f8ed0d; outline:none; font-size:15px;}
+.formbox .form .button:active{ background-color:#E7DE1C;}
+.formbox .form .sns-row{font-size:15px; vertical-align:top; padding-bottom:8px;}
+.formbox .form .sns-row .icon{ margin-right:8px; }
+.formbox .form .map-row{ font-size:15px; padding-top:10px; border-top:1px solid #9c9685;}
+.formbox .form .map-row a{color:#27512a; display:block;vertical-align:top;}
+.formbox .form .map-row .icon-map-marker{ margin-right:5px;}
+.formbox .icon{ width:20px; height:20px; display:inline-block; overflow:hidden;}
+.icon-circle-right{background:url(../images/icon-circle-right.png) no-repeat center center;} 
+.icon-qq{ background:url(../images/icon-qq.png) no-repeat  center center;}
+.icon-weibo{ background:url(../images/icon-weibo.png) no-repeat  center center;}
+.icon-map-marker{ background:url(../images/icon-map-marker.png) no-repeat  center center;}
+#register{ display:none;}
+
+.column-1{ width:390px; float:left;}
+.column-2{ width:500px; float:right;}
+
+/*glory*/
+.glory{-webkit-user-select:none; position:relative;}
+.glory .hd{ text-align:center; margin-bottom:27px;}
+.glory .bd{ zoom:1;}
+.glory .bd ul{margin-left:-20px; margin-top:-10px; zoom:1;}
+.glory .bd ul li{ float:left; margin-left:20px; margin-top:10px;}
+.photoitem{  border-radius:50px;box-shadow: 0 1px 1px rgba(100, 100, 100, .15); width:82px; height:82px; background-color:#fff;}
+.photoitem a{border-radius:50px;width:70px; height:70px; display:block; margin:auto; padding-top:6px;}
+.photoitem img{border-radius:50px; width:70px; height:70px;}
+.photoitem a:hover{ margin:0; padding-top:0;}
+.photoitem a:hover img{ width:82px; height:82px;}
+
+/*news*/
+.news{ position:relative;}
+.news .hd{ text-align:center; margin-bottom:27px;}
+.news .icon-caret-up{ width:20px; height:9px; background:url(../images/icon-caret-up.png) no-repeat; margin:auto;}
+.news .bd{ zoom:1; background-color:#fff;box-shadow: 0 1px 1px rgba(100, 100, 100, .15); border-radius:5px; padding:30px 30px 30px 30px;}
+.news .bd ul{ zoom:1;margin-top:-17px;}
+.news .bd ul li{ margin-top:17px; overflow:hidden;}
+.news .bd ul li .pic{width:60px; height:60px;float:left;}
+.news .bd ul li .pic a{}
+.news .bd ul li .pic img{border-radius:50px;width:60px; height:60px;box-shadow: 0 1px 1px rgba(100, 100, 100, .15)}
+.news .bd ul li .cont{ font-size:15px; margin-left:80px;}
+.news .bd ul li .cont .tit{ color:#666;margin-top:5px; margin-bottom:5px;}
+.news .bd ul li .cont .tit a{}
+.news .bd ul li .cont .tit b{ font-weight:normal;}
+.news .bd ul li .cont p{ color:#735b20;overflow:hidden;white-space: nowrap;text-overflow:ellipsis;}
+.news .bd ul li .cont p{ -webkit-transition: all 0.3s ease-out; -moz-transition: all 0.3s ease-out; transition: all 0.3s ease-out; -o-transition: all 0.3s ease-out; -ms-transtion: all 0.3s ease-out; }
+.news .bd ul li .cont p:hover{ background-color:#f2eee4;}
+
+/*footer*/
+.footer{ padding-top:60px; padding-bottom:30px;}
+.footer .bd{ text-align:center; color:#a19372;}
+.footer .copyright{color:#a19372; font-family: Arial;}

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="org.swz.com.family.repository.mybatis.TalkDao">
+
+    <resultMap id="talk" type="org.swz.com.family.entity.Talk">
+        <id column="id" property="talkId"/>
+        <result column="talk_content" property="talkContent"/>  
+        <result column="user_id" property="userId"/> 
+        <result column="nick" property="nick"/> 
+        <result column="head_url" property="headUrl"/> 
+        <result column="create_time" property="createTime"/> 
+        <result column="modified_time" property="modifiedTime"/> 
+        <result column="reply_count" property="replyCount"/> 
+        <result column="reply_talk_id" property="repliedTalkId"/> 
+        <result column="agree_count" property="agreeCount"/> 
+        <result column="isAgree" property="isAgree"/>
+        <result column="sex" property="sex"/>  
+        <result column="talk_type" property="talkType"/>
+        <collection property="replies" column="id" select="org.swz.com.family.repository.mybatis.TalkDao.getRepliesForTalk"></collection>
+        <collection property="agrees" column="id" select="org.swz.com.family.repository.mybatis.TalkDao.getAgreesForTalk"></collection>
+    </resultMap> 
+    
+    <resultMap id="agree" type="org.swz.com.family.entity.FamilyTalkAgree">
+        <id column="agree_id" property="agreeId"/>
+        <result column="talk_id" property="talkId"/>  
+        <result column="agree_time" property="agreeTime"/> 
+        <result column="agree_user_id" property="agreeUserId"/> 
+        <result column="nick" property="agreeUserNick"/>  
+    </resultMap> 
+
+	<select id="getTalksForPage" parameterType="map" resultMap="talk">
+       select a.id,
+			a.talk_content,
+			a.user_id,
+			b.nick,
+			c.head_url,
+			c.sex,
+			a.create_time,
+			a.modified_time,
+			a.reply_count,
+			a.reply_talk_id,
+			(select count(1) from family_talk_agree d where d.talk_id=a.id) agree_count,
+			(select count(1) from  family_talk_agree d where d.talk_id=a.id and d.agree_user_id=#{userId}) isAgree, 
+			a.talk_type from family_user_talk a, family_user b, family_person c 
+			where a.user_id=b.id  and b.person_id=c.person_id 
+			      and a.talk_type=0 
+		     <if test="talkFocus != null">
+                and a.talk_focus=#{talkFocus} 
+	        </if>  
+			<if test="searchContent != null">
+	             and (a.talk_content like CONCAT('%', #{searchContent} , '%') or b.nick like CONCAT('%', #{searchContent} , '%'))  
+	        </if>  
+			order by a.create_time desc
+	</select> 
+	
+	
+	<select id="getAgreesForTalk" parameterType="map" resultMap="agree">
+       select a.agree_id,
+			a.talk_id,
+			a.agree_time,
+		    b.nick,
+			a.agree_user_id
+			 from family_talk_agree a, family_user b where a.agree_user_id=b.id and a.talk_id=#{talkId} order by a.agree_time
+	</select> 
+	<select id="getRepliesForTalk" parameterType="map" resultMap="talk">
+       select a.id,
+			a.talk_content,
+			a.user_id,
+			b.nick,
+			c.head_url,
+			a.create_time,
+			a.modified_time,
+			a.reply_count,
+			a.reply_talk_id,
+			a.agree_count,
+			a.talk_type from family_user_talk a, family_user b, family_person c where a.user_id=b.id  and b.person_id=c.person_id and a.talk_type=1 and a.reply_talk_id=#{talkId} order by a.create_time desc
+	</select> 
+	
+	<insert id="save">
+		insert into family_user_talk(
+		    id,
+			talk_content,
+			user_id,
+			create_time,
+			modified_time,
+			reply_count,
+			talk_focus,
+			reply_talk_id,
+			agree_count,
+			talk_type)values(
+				#{talkId},
+				#{talkContent},
+				#{userId},
+				#{createTime},
+				#{modifiedTime},
+				#{replyCount},
+				#{talkFocus},
+				#{repliedTalkId},
+				0, 
+				#{talkType}
+			) 
+	</insert>
+	
+	<update id="updateReplyCount">
+		update family_user_talk set reply_count=reply_count+1 where id=#{repliedTalkId}
+	</update>
+	<update id="updateAgreeCount">
+		update family_user_talk set agree_count=agree_count+1 where id=#{repliedTalkId}
+	</update>
+	
+	<insert id="saveAgree">
+		insert into family_talk_agree(agree_id,talk_id, agree_user_id, agree_time) values(#{agreeId},#{talkId},#{agreeUserId},now())
+	</insert> 
+</mapper> 

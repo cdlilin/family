@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="org.swz.com.family.repository.mybatis.MergeApplyDao">
+
+    <resultMap id="mergeApply" type="org.swz.com.family.entity.MergeApply">
+        <id column="merge_apply_id" property="mergeApplyId"/>
+        <result column="apply_user_id" property="applyUserId"/>  
+        <result column="apply_time" property="applyTime"/> 
+        <result column="merge_family_id" property="mergeFamilyId"/> 
+        <result column="apply_family_name" property="applyFamilyName"/> 
+        <result column="apply_user_name" property="applyUserName"/> 
+        <result column="apply_family_id" property="applyFamilyId"/> 
+        <result column="merge_person_id" property="mergePersonId"/> 
+        <result column="apply_user_id" property="applyUserId"/> 
+        <result column="apply_status" property="applyStatus"/> 
+        <result column="apply_result" property="applyResult"/> 
+         <result column="merge_type" property="mergeType"/> 
+         <association property="mergePerson" column="merge_person_id" select="org.swz.com.family.repository.mybatis.PersonDao.seachPersonInfoByPersonId"/>
+    </resultMap>
+
+	<select id="getApplyByParams" parameterType="map" resultMap="mergeApply">
+      select  a.merge_apply_id,
+			  a.apply_family_id,
+			  (select c.family_name from family c where a.apply_family_id=c.family_id) apply_family_name,
+			  a.merge_family_id, 
+			  a.apply_status,
+			  a.apply_result,
+			  a.apply_time,
+			  a.apply_user_id,
+			  a.merge_type,
+			   (select c.user_name from family_user c where a.apply_user_id=c.id) apply_user_name,
+			  a.merge_person_id from  family_merge_apply a where 1=1
+		      <if test="userId != null">
+		       and a.apply_user_id=#{userId}
+		      </if>
+		       <if test="applyStatus != null">
+		       and a.apply_status=#{applyStatus}
+		      </if>
+		       order by a.apply_time desc
+	</select> 
+	
+	<select id="getApplyCountByParams" parameterType="map" resultType="int">
+       select  count(1) from family_merge_apply a where 1=1
+	       <if test="userId != null">
+		       and a.apply_user_id=#{userId}
+		      </if>
+		       <if test="applyStatus != null">
+		       and a.apply_status=#{applyStatus}
+		      </if>
+	</select>  
+	
+	<select id="getApplyForFamilyAdmin" parameterType="string" resultMap="mergeApply">
+       select  a.merge_apply_id,
+			  a.apply_family_id,
+			  (select c.family_name from family c where a.apply_family_id=c.family_id) apply_family_name,
+			  a.merge_family_id, 
+			  a.apply_status,
+			  a.apply_result,
+			  a.apply_time,
+			  a.apply_user_id,
+			    a.merge_type,
+			   (select c.user_name from family_user c where a.apply_user_id=c.id) apply_user_name,
+			  a.merge_person_id from family_merge_apply a
+		    where exists(select 1 from family_relationShip c 
+		                       where c.family_id=a.merge_family_id and c.person_id=#{personId} and c.isFamilyAdmin=1) and a.apply_status &lt;&gt; 3 order by a.apply_status, a.merge_family_id, a.apply_time desc
+	</select> 
+	
+	<insert id="save">
+		insert into family_merge_apply(merge_apply_id, apply_family_id, merge_family_id,apply_time,apply_status, merge_person_id,apply_user_id, apply_result,merge_type)
+						values(#{mergeApplyId},#{applyFamilyId},#{mergeFamilyId},now(),#{applyStatus},#{mergePersonId},#{applyUserId},#{applyResult},#{mergeType})
+	</insert>  
+	
+	<update id="updateApplyStatus">
+		update family_merge_apply set apply_status = #{applyStatus}, apply_result=#{applyResult} where merge_apply_id=#{mergeApplyId}
+	</update> 
+	
+	<delete id="deleteApples">
+		delete from family_merge_apply where merge_apply_id in(#{ids})
+	</delete> 
+	
+</mapper> 

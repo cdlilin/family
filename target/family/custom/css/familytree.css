@@ -1,0 +1,43 @@
+body { color: #333; font-family: "宋体", Arial; font-size: 12px; background: #f4f4f4; line-height: 1.41; }
+
+/*treebox*/
+.treebox{text-align:center; }
+.treerow{ text-align:center; font-size:0;}
+.treerow .treeitem:first-child{ padding-left:0;}
+.treerow .treeitem:last-child{ padding-right:0;}
+.treetable{}
+.treetable td:first-child .treeitem{ padding-left:0;}
+.treetable td:last-child .treeitem{ padding-right:0;}
+/*treeitem*/
+.treeitem{ display:inline-block; position:relative;font-size:12px; padding-left:10px; padding-right:10px;  background:url(../images/horizontal-line.png) repeat-x; width:160px; height:166px;}
+.treeitem .bd{ display:inline-block; position:relative;}
+.treeitem .bd .newstip{ width:10px; height:10px; background-color:#e71f19; position:absolute; right:0; top:0; border-radius:50%; overflow:hidden; font-size:0;}
+.treeitem .pic{ border:1px dashed #413c8c; background-color:#f4f4f4; border-radius:50%;display:inline-block; position:relative;}
+.treeitem .pic img{border-radius:50%;padding:5px; width:66px; height:66px;}
+.treeitem .name{ text-align:center;background-color:#f4f4f4;  color:#3d388a; line-height:24px; }
+.treeitem .name a{ color:#3d388a;}
+.treeline{ width:100%; height:64px;background: url(../images/line-no-angle-nor.png) no-repeat ;}
+.treeline1{ background: url(../images/line-plus.png) no-repeat;}
+.treeline2{ background: url(../images/line-left-angle.png) no-repeat;}
+.treeline3{ background: url(../images/line-right-angle.png) no-repeat;}
+.treeline4{ background: url(../images/line-no-angle.png) no-repeat left bottom;}
+.treeline-noline{ background:none;}
+.treeitem-noline{ background:none !important;}
+
+.treeitem:hover{}
+.treeitem:hover .treesub{ display:inline-block;}
+.treeitem .bd .tools{ display:none; position:absolute; top:5px; left:5px; width:66px; height:66px; background-color:rgba(0,0,0,0.6); border-radius:50%;}
+.treeitem .bd .tools .tools-bd{ text-align:center; height:100%; vertical-align:middle; overflow:hidden; border-radius:50%;}
+.treeitem .bd .tools .tools-bd a{ color:#fff; display:inline-block; padding-top:25px;vertical-align:middle; text-align:center;}
+.icon-edit{ width:14px; height:14px; vertical-align:-2px; margin-right:2px; display:inline-block; overflow:hidden; background:url(../images/icon-edit.png) no-repeat;}
+.treeitem:hover .tools{ display:block;}
+/*treesub*/
+.treesub{ display:inline-block; position:relative; position:relative ; font-size:12px; display:none}
+.treesub .treesub-bd{ display:inline-block; }
+.treesub .treesub-pic{ border:1px dashed #413c8c; background-color:#f4f4f4; border-radius:50%;display:inline-block; }
+.treesub .treesub-pic img{border-radius:50%;padding:2px; width:50px; height:50px;}
+.treesub .treesub-name{ text-align:center;background-color:#f4f4f4;  color:#3d388a; line-height:24px; }
+.treesub .treesub-name a{ color:#3d388a;}
+
+.myself .pic{ border:1px dashed #00aeff; background-color:#00aeff; border-radius:50%;display:inline-block; position:relative;}
+.myself .pic img{border-radius:50%;padding:5px; width:66px; height:66px;}

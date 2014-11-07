@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="org.swz.com.family.repository.mybatis.ApplyDao">
+
+    <resultMap id="apply" type="org.swz.com.family.entity.Apply">
+        <id column="apply_id" property="applyId"/>
+        <result column="apply_user_id" property="applyUserId"/>  
+        <result column="apply_time" property="applyTime"/> 
+        <result column="apply_family" property="applyFamily"/> 
+        <result column="family_name" property="familyName"/> 
+        <result column="user_name" property="applyUserName"/> 
+        <result column="apply_validate" property="applyValidate"/> 
+        <result column="apply_person_id" property="applyPersonId"/> 
+        <result column="isDone" property="isDone"/> 
+        <result column="apply_result" property="applyResult"/> 
+    </resultMap>
+
+	<select id="getApplyByParams" parameterType="map" resultMap="apply">
+       select a.apply_id, 
+		      a.apply_time,
+		      a.apply_family,
+		      b.family_name,
+		      a.apply_validate,
+		      a.apply_person_id,
+		      a.isDone,
+		      a.apply_result from family_apply a, family b where a.apply_family=b.family_id
+		      <if test="userId != null">
+		       and a.apply_user_id=#{userId}
+		      </if>
+		       <if test="applyType != null">
+		       and a.apply_type=#{applyType}
+		      </if>
+		       order by a.apply_time desc
+	</select> 
+	
+	<select id="getApplyCountByParams" parameterType="map" resultType="int">
+       select  count(1) from family_apply a, family b where a.apply_family=b.family_id
+	      <if test="userId != null">
+	       and a.apply_user_id=#{userId}
+	      </if>
+	       <if test="applyType != null">
+	       and a.apply_type=#{applyType}
+	      </if> 
+	</select>  
+	
+	<select id="getApplyForFamilyAdmin" parameterType="string" resultMap="apply">
+      select a.apply_id, 
+             a.apply_user_id,         
+		     b.user_name, 
+		     c.family_name,
+		     a.apply_time,
+		     a.apply_family,        
+		     a.apply_validate,  
+		     a.apply_person_id,
+		     a.isDone,        
+		     a.apply_result from family_apply a, family_user b,family c  
+		    where a.apply_user_id=b.id and a.apply_family=c.family_id and exists(select 1 from family_relationShip c 
+		                       where c.family_id=a.apply_family and c.person_id=#{personId} and c.isFamilyAdmin=1) and a.apply_result &lt;&gt; 3 order by a.isDone, a.apply_family, a.apply_time desc
+	</select> 
+	
+	<insert id="save">
+		insert into family_apply(apply_id, apply_user_id, apply_time,apply_family, apply_validate,apply_person_id, isDone, apply_result)
+						values(#{applyId},#{applyUserId},now(),#{applyFamily},#{applyValidate},#{applyPersonId},#{isDone},#{applyResult})
+	</insert>  
+	
+	<update id="updateApplyStatus">
+		update family_apply set isDone = #{isDone}, apply_result=#{applyResult} where apply_id=#{applyId}
+	</update> 
+	
+	<delete id="deleteApples">
+		delete from family_apply where apply_id in(#{ids})
+	</delete> 
+	
+</mapper> 

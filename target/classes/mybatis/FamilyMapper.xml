@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="org.swz.com.family.repository.mybatis.FamilyDao">
+
+    <resultMap id="family" type="org.swz.com.family.entity.Family">
+        <id column="family_id" property="familyId"/>
+        <result column="area_id" property="areaId"/> 
+        <result column="create_user" property="createUser"/> 
+        <result column="user_type" property="userType"/> 
+        <result column="create_time" property="createTime"/> 
+        <result column="include_flag" property="includeFlag"/>  
+        <result column="isFamilyAdmin" property="isFamilyAdmin"/>
+         <result column="family_name" property="familyName"/> 
+        <result column="family_rules" property="familyRules"/>
+    </resultMap>
+    
+    <resultMap id="familyForest" type="org.swz.com.family.entity.FamilyForest">
+        <id column="family_id" property="familyId"/>
+        <result column="parent_id" property="parentId"/> 
+        <result column="contact_person_id" property="contactPersonId"/> 
+        <result column="isChecked" property="isChecked"/> 
+        <result column="root_id" property="rootId"/> 
+        <result column="currentFamilyName" property="currentFamilyName"/> 
+        <result column="parentFamilyName" property="parentFamilyName"/> 
+    </resultMap>
+    
+    <resultMap id="familyRule" type="org.swz.com.family.entity.FamilyRule">
+        <id column="rule_id" property="ruleId"/>
+        <result column="family_id" property="familyId"/> 
+        <result column="create_user_id" property="createUserId"/> 
+        <result column="nick" property="createUserName"/> 
+        <result column="agreeCount" property="agreeCount"/> 
+        <result column="rule_title" property="ruleTitle"/> 
+        <result column="rule_content" property="ruleContent"/>  
+        <result column="create_time" property="createTime"/>  
+    </resultMap>
+    
+    <resultMap id="familyCulture" type="org.swz.com.family.entity.FamilyCulture">
+        <id column="culture_id" property="cultureId"/>
+        <result column="family_id" property="familyId"/> 
+        <result column="create_user_id" property="createUserId"/> 
+        <result column="nick" property="createUserName"/> 
+        <result column="agreeCount" property="agreeCount"/> 
+        <result column="culture_title" property="cultureTitle"/> 
+        <result column="culture_content" property="cultureContent"/>  
+        <result column="create_time" property="createTime"/>  
+    </resultMap>
+    
+    <resultMap id="familyForHit" type="org.swz.com.family.entity.Family">
+        <id column="family_id" property="familyId"/>
+        <result column="family_name" property="familyName"/> 
+        <result column="area_id" property="areaId"/> 
+        <result column="create_user" property="createUser"/> 
+        <result column="user_type" property="userType"/> 
+        <result column="create_time" property="createTime"/> 
+        <result column="include_flag" property="includeFlag"/>  
+        <result column="isFamilyAdmin" property="isFamilyAdmin"/>  
+         <result column="family_rules" property="familyRules"/>
+        <association property="person" column="person_id" select="org.swz.com.family.repository.mybatis.PersonDao.seachPersonInfoByPersonId"/>
+    </resultMap> 
+    
+    <resultMap id="familyForMerge" type="org.swz.com.family.entity.Family">
+        <id column="family_id" property="familyId"/>
+        <result column="area_id" property="areaId"/> 
+        <result column="create_user" property="createUser"/> 
+        <result column="user_type" property="userType"/> 
+        <result column="create_time" property="createTime"/> 
+        <result column="include_flag" property="includeFlag"/>  
+        <result column="isFamilyAdmin" property="isFamilyAdmin"/>
+         <result column="family_name" property="familyName"/> 
+        <result column="family_rules" property="familyRules"/>
+         <result column="familyCount" property="familyCount"/>
+        <result column="nick" property="createUserName"/>
+        <result column="areaName" property="areaName"/> 
+        <result column="head_url" property="createUserHeadUrl"/> 
+        <result column="sex" property="createUserSex"/> 
+    </resultMap>
+
+	<select id="searchFamily" parameterType="map" resultMap="family">
+         select a.family_id,
+                a.family_name,
+				a.area_id,
+				a.create_user_id, 
+				a.user_type,
+				a.create_time,
+				a.include_flag,
+				a.family_rules
+				from family a where 1=1 
+		<if test="areaId != null">
+            and a.areaId like CONCAT(#{areaId} , '%')  
+        </if> 
+        <if test="createUserId != null">
+            and a.create_user_id =#{createUserId}  
+        </if>   
+        <if test="personId != null">
+            exists(select 1 from family_relationship b where b.person_id=#{personId} and a.family_id=b.family_id)  
+        </if>   
+         <if test="includeFlag != null">
+            and a.include_flag =#{includeFlag}  
+        </if>  
+	</select>
+	
+	
+	<select id="searchFamilyCountByShip" parameterType="string" resultMap="family">
+         select count(1) from family_relationship a , family_person b where a.family_id=b.family_id  
+         <if test="fullName != null">
+             and b.full_name=#{fullName}
+        </if>  
+        <if test="fatherName != null">
+             and (exists(select 1 from family_relationship c, family_person d where c.family_id=d.family_id  and d.person_id=a.parent_id and d.fullName=#{fatherName}) 
+	        <if test="matherName != null">
+	              or exists(select 1 from family_relationship c, family_person d where c.family_id=d.family_id  and d.person_id=a.parent_id and d.fullName=#{matherName})
+	        </if> 
+	        )
+        </if> 
+        <if test="matherName != null"> 
+           <if test="fatherName == null">
+               and exists(select 1 from family_relationship c, family_person d where c.family_id=d.family_id  and d.person_id=a.parent_id and d.fullName=#{matherName})
+           </if>  
+        </if>  
+	</select> 
+	
+	<select id="searchFamilyForPerson" parameterType="string" resultMap="family">
+         select a.family_id,
+                b.family_name,
+				b.area_id,
+				b.create_user_id,
+				b.user_type,
+				b.create_time,
+				b.include_flag,
+				a.isFamilyAdmin,
+				b.family_rules
+				from family_relationship a , family b where a.family_id=b.family_id 
+             and a.person_id=#{personId}  
+	</select>  
+	
+	<select id="searchFamilyForManage" parameterType="map" resultMap="family">
+         select b.family_id,
+                b.family_name,
+				b.area_id,
+				b.create_user_id,
+				b.user_type,
+				b.create_time,
+				b.include_flag,
+				b.family_rules
+				from family b where b.area_id in (${areaIds})
+				<if test="surname != null">
+		             and  b.surname=#{surname}
+		        </if>  
+				 order by b.surname
+	</select> 
+	
+	<select id="searchFamilyForMerge" parameterType="map" resultMap="familyForMerge">
+         select b.family_id,
+                b.family_name,
+				b.area_id,
+				b.create_user_id,
+				a.nick,
+				c.sex,
+				c.head_url,
+				(select a.full_name from area a where a.area_id=b.area_id) areaName,
+				(select count(1) from family_relationship a where a.family_id=b.family_id) familyCount,
+				b.user_type,
+				b.create_time,
+				b.include_flag,
+				b.family_rules
+			     from family b, family_user a, family_person c where b.create_user_id=a.id and a.person_id=c.person_id and b.area_id in (${areaIds})
+				<if test="surname != null">
+		             and  b.surname=#{surname}
+		        </if>  
+				 order by b.family_name
+	</select>     
+	
+	
+	<select id="searchFamilyCountForPerson" parameterType="string" resultType="int">
+         select count(1) from family_relationship a , family b where a.family_id=b.family_id 
+             and a.person_id=#{personId}  
+	</select> 
+	<select id="searchHitPersonByPersonId" parameterType="map" resultMap="familyForHit">
+         select a.family_id,
+                a.family_name,
+				a.area_id,
+				a.create_user_id,
+				a.user_type,
+				a.create_time,
+				a.include_flag,
+				c.person_id,  
+				a.family_rules
+				from family a ,family_relationship b, family_person c where a.family_id=b.family_id and b.person_id=c.person_id
+				<!-- and not exists(select 1 from family_user w where w.person_id=b.person_id) -->
+		<if test="fullName != null">
+             and c.full_name=#{fullName}
+        </if>  
+        <if test="fullName != null">
+             and a.family_id=#{contactFamilyId}
+        </if>  
+    </select>
+	<select id="searchFamilyForRegUser" parameterType="map" resultMap="familyForHit">
+         select a.family_id,
+                a.family_name,
+				a.area_id,
+				a.create_user_id,
+				a.user_type,
+				a.create_time,
+				a.include_flag,
+				c.person_id,
+				a.family_rules
+				from family a ,family_relationship b, family_person c where a.family_id=b.family_id and b.person_id=c.person_id
+				<!-- and not exists(select 1 from family_user w where w.person_id=b.person_id) -->
+		<if test="fullName != null">
+             and c.full_name=#{fullName}
+        </if>  
+        <if test="fatherName != null">
+             and (exists(select 1 from family_relationship e, family_person f where e.person_id=f.person_id and f.person_id=b.parent_id and f.full_name=#{fatherName}) 
+	        <if test="matherName != null">
+	              or exists(select 1 from family_relationship e, family_person f where e.person_id=f.person_id and f.person_id=b.parent_id and f.full_name=#{matherName})
+	        </if> 
+	        )
+        </if> 
+        <if test="matherName != null"> 
+           <if test="fatherName == null">
+               and exists(select 1 from family_relationship e, family_person f where e.person_id=f.person_id and f.person_id=b.parent_id and f.full_name=#{matherName})
+           </if> 
+           <if test="fatherName != null">
+           </if>
+        </if> 
+        <if test="areaId != null ">
+             and (#{areaId} like CONCAT(a.area_id  , '%') or a.area_id like CONCAT(#{areaId} , '%'))
+        </if>    
+	</select> 
+	
+	<select id="getFamilyRule" parameterType="map" resultMap="familyRule">
+         select a.rule_id,
+				a.rule_title,
+				a.rule_content,
+				a.create_time,
+				a.create_user_id,
+				b.nick,
+				a.agreeCount,
+				a.family_id
+				from family_rule a, family_user b
+				where  a.create_user_id=b.id and a.family_id=#{familyId}
+	</select> 
+	
+	<select id="getFamilyCulture" parameterType="map" resultMap="familyCulture">
+         select a.culture_id,
+				a.culture_title,
+				a.culture_content,
+				a.create_time,
+				a.create_user_id,
+				b.nick,
+				a.agreeCount,
+				a.family_id
+				from family_culture a, family_user b
+				where  a.create_user_id=b.id and a.family_id=#{familyId}
+	</select>  
+	
+	<select id="searchFamilyCountForRegUser" parameterType="map" resultType="int">
+         select count(1) from (select distinct b.family_id from family_relationship b, family_person c where b.person_id=c.person_id
+		<if test="areaId != null ">
+             and (#{areaId} like CONCAT(a.area_id  , '%') or a.area_id like CONCAT(#{areaId} , '%'))
+        </if>   
+        <if test="fullName != null">
+             and c.full_name=#{fullName}
+        </if> 
+        ) a
+	</select> 
+	
+	<select id="searchContactFamily" parameterType="string" resultType="int">
+         select count(1) from family_forest where family_id=#{familyId} and family_id=parent_id
+	</select> 
+	
+	<insert id="saveRelationShip" > 
+        insert into family_relationship
+        (  
+			person_id,
+			family_id,
+			parent_id,
+			relationship_type,
+			generation,
+			isFamilyAdmin,
+			familyType
+        )values
+        ( 
+           #{personId,jdbcType=VARCHAR},
+	       #{familyId,jdbcType=VARCHAR},
+	       #{parentId,jdbcType=VARCHAR},
+	       #{relationShipType,jdbcType=NUMERIC},
+	       #{generation,jdbcType=NUMERIC},
+	       #{isFamilyAdmin,jdbcType=NUMERIC},
+	       #{familyType,jdbcType=NUMERIC}
+	       
+        ) 
+	</insert>
+	<insert id="saveFamilyRule" > 
+	    insert into family_rule(rule_id,
+							rule_title,
+							rule_content,
+							create_time,
+							create_user_id,
+							agreeCount,
+							family_id) 
+		  values(#{ruleId,jdbcType=VARCHAR},
+				#{ruleTitle,jdbcType=VARCHAR},
+				#{ruleContent,jdbcType=VARCHAR},
+				now(),
+				#{familyId,jdbcType=VARCHAR},
+				#{agreeCount,jdbcType=VARCHAR},
+				#{createUserId,jdbcType=VARCHAR})
+	</insert>
+	
+	<insert id="saveFamilyCulture" > 
+	     insert into family_culture(culture_id,
+							culture_title,
+							culture_content,
+							create_time,
+							create_user_id,
+							agreeCount,
+							family_id) 
+		values( #{cultureId,jdbcType=VARCHAR},
+				#{cultureTitle,jdbcType=VARCHAR},
+				#{cultureContent,jdbcType=VARCHAR},
+				now(),
+				#{familyId,jdbcType=VARCHAR},
+				#{agreeCount,jdbcType=VARCHAR},
+				#{createUserId,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="deleteRelationShipForMerge">
+		delete from family_relationship where person_id=#{mergePersonId} and family_id=#{mergeFamilyId}
+	</delete>
+	
+	<insert id="saveFamilyForest" > 
+        insert into family_forest
+        (  
+			family_id,
+			parent_id,
+			contact_person_id,
+			isChecked,
+			root_id
+        )values
+        ( 
+	       #{familyId,jdbcType=VARCHAR},
+	       #{parentId,jdbcType=VARCHAR},
+	       #{contactPersonId,jdbcType=VARCHAR},
+	       #{isChecked,jdbcType=NUMERIC},
+	       #{rootId,jdbcType=VARCHAR}
+        ) 
+	</insert>
+	
+	<update id="updateFamilyForest">
+		update family_forest set parent_id=#{parentId}, isChecked=#{isChecked}, root_id=#{root_id},contact_person_id=#{contactPersonId} where family_id=#{familyId}
+	</update> 
+	
+	<select id="searchFamilyForest" parameterType="string" resultMap="familyForest">
+         select family_id, parent_id, contact_person_id, isChecked, root_id from family_forest where family_id=#{familyId}
+	</select> 
+	
+	<select id="searchFamilyForestForAdmin" parameterType="map" resultMap="familyForest">
+         select c.family_id,a.family_name currentFamilyName, b.family_name parentFamilyName, c.parent_id, c.contact_person_id, c.isChecked, c.root_id from family a, family b, family_forest c where a.family_id=c.family_id and b.family_id=c.parent_id and a.area_id in(#{areaIds}) and c.isChecked=0
+	</select> 
+	
+	<update id="updateRelationShip">
+		update family_relationship set relationship_type=2, parent_id=#{parentId} where family_id=#{familyId} and person_id=#{personId}
+	</update> 
+	<update id="updateMergeRelationShip">
+		update family_relationship set relationship_type=#{relationshipType}, parent_id=#{parentId}, family_id=#{mergeFamilyId},isFamilyAdmin=0 where family_id=#{currentFamilyId} and person_id=#{personId}
+	</update> 
+	
+	<update id="updateFamilyIdForRelationShip">
+		update family_relationship set family_id=#{mergeFamilyId} where family_id=#{currentFamilyId}
+	</update> 
+	
+	<insert id="save" > 
+        insert into family
+        ( 
+        	family_id,
+			family_name,
+			area_id,
+			create_user_id,
+			user_type,
+			create_time,
+			include_flag,
+			surname 
+        )values
+        ( 
+           #{familyId,jdbcType=VARCHAR},
+	       #{familyName,jdbcType=VARCHAR},
+	       #{areaId,jdbcType=VARCHAR},
+	       #{createUserId,jdbcType=VARCHAR},
+	       #{userType,jdbcType=VARCHAR},
+	       now(),
+	       #{includeFlag,jdbcType=NUMERIC}, 
+	       #{surname,jdbcType=VARCHAR} 
+        ) 
+    </insert> 
+    
+    <delete id="delSpouseRelation">
+       delete from family_relationship where family_id=#{familyId} and person_id=#{personId}
+    </delete>
+     <delete id="delFamilyById">
+       delete from family where family_id=#{familyId}
+    </delete>
+    
+</mapper> 

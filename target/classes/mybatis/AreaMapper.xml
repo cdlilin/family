@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="org.swz.com.family.repository.mybatis.AreaDao">
+
+    <resultMap id="area" type="org.swz.com.family.entity.Area">
+        <id column="area_id" property="id"/>
+        <result column="full_name" property="fullName"/> 
+        <result column="name" property="name"/> 
+        <result column="pid" property="parentId"/> 
+        <result column="status" property="status"/> 
+    </resultMap>
+
+	<select id="getAreaByParentId" parameterType="int" resultMap="area">
+        SELECT  area_id , name ,pid, status from area
+        WHERE pid=#{parentId}
+	</select> 
+	<select id="searchAll" parameterType="int" resultMap="area">
+        SELECT  area_id , name ,pid, status from area 
+	</select> 
+	
+	<select id="searchAreaByName" parameterType="string" resultMap="area">
+        SELECT  area_id , full_name ,pid ,status from area where full_name like concat('%', #{areaName}, '%') 
+	</select>  
+</mapper> 
